@@ -17,10 +17,10 @@ const ChangePasswordRedirect: React.FC = () => {
       sessionStorage.setItem('resetEmail', email);
       
       // Redirect to reset-password
-      router.push('/reset-password');
+      router.push('/resetPassword/resetPasswordForm');
     } else {
       // If no parameters, redirect to forgot-password
-      router.push('/forgot-password');
+      router.push('/resetPassword/sendResetEmail');
     }
   }, [searchParams, router]);
 

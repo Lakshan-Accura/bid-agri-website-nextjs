@@ -6,7 +6,7 @@ import { UserOutlined, LockOutlined, TruckOutlined, MailOutlined } from '@ant-de
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { authApi, tokenUtils, type LoginRequest } from '../../components/apiEndpoints/login';
-import MainLayout from '../../components/mainLayout/mainLayout';
+import MainLayout from '../../components/mainLayout/page';
 import backgroundImage from '../../../public/background.jpg';
 import "./farmerLogin.css"
 
@@ -58,7 +58,7 @@ const FarmerLogin: React.FC = () => {
         message.success('Login successful! Redirecting to farmer dashboard...');
         
         setTimeout(() => {
-          router.push('/farmerDashboard');
+          router.push('/dashboards/farmerDashboard');
         }, 1500);
       } else {
         // Handle API error responses
@@ -105,7 +105,7 @@ const FarmerLogin: React.FC = () => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('userType', 'farmer');
     }
-    router.push('/forgot-password');
+    router.push('/resetPassword/sendResetEmail');
   };
 
   return (
@@ -227,7 +227,7 @@ const FarmerLogin: React.FC = () => {
 
           <div className="farmer-login-footer">
             <Text type="secondary">
-              Don't have an account? <Link href="/farmerSignup">Sign up here</Link>
+              Don't have an account? <Link href="/logins/farmerSignup">Sign up here</Link>
             </Text>
             <br />
             <Text type="secondary" style={{ fontSize: '12px', marginTop: '8px', display: 'block' }}>

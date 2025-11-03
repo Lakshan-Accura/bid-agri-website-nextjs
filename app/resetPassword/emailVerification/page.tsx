@@ -81,7 +81,7 @@ const EmailVerification: React.FC = () => {
               <Button 
                 type="primary" 
                 key="farmer-login" 
-                onClick={() => router.push('/farmerLogin')}
+                onClick={() => router.push('/logins/farmerLogin')}
                 style={{ 
                   background: '#52c41a',
                   borderColor: '#52c41a',
@@ -93,7 +93,7 @@ const EmailVerification: React.FC = () => {
               <Button 
                 type="primary" 
                 key="store-login" 
-                onClick={() => router.push('/storeLogin')}
+                onClick={() => router.push('/logins/storeLogin')}
                 style={{ 
                   background: '#1890ff',
                   borderColor: '#1890ff',

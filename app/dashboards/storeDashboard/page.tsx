@@ -95,7 +95,7 @@ const StoreDashboard: React.FC<StoreDashboardProps> = ({ children }) => {
         break;
       case 'logout':
         tokenUtils.clearTokens();
-        router.push('/storeLogin');
+        router.push('/logins/storeLogin');
         break;
       default:
         break;

@@ -6,7 +6,7 @@ import { UserOutlined, LockOutlined, ShopOutlined, MailOutlined } from '@ant-des
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { authApi, tokenUtils, type LoginRequest } from '../../components/apiEndpoints/login';
-import MainLayout from '../../components/mainLayout/mainLayout';
+import MainLayout from '../../components/mainLayout/page';
 import './storeLogin.css';
 
 const { Title, Text } = Typography;
@@ -87,7 +87,7 @@ const AgriStoreLogin: React.FC = () => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('userType', 'store');
     }
-    router.push('/forgot-password');
+    router.push('/resetPassword/sendResetEmail');
   };
 
   return (

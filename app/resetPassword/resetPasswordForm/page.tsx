@@ -3,8 +3,8 @@ import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { LockOutlined, KeyOutlined, ArrowLeftOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { passwordApi } from '../apiEndpoints/login';
-import type { ResetPasswordRequest } from '../apiEndpoints/login';
+import { passwordApi } from '../../components/apiEndpoints/login';
+import type { ResetPasswordRequest } from '../../components/apiEndpoints/login';
 
 const { Title, Text } = Typography;
 
@@ -29,7 +29,7 @@ const ResetPasswordForm: React.FC = () => {
         });
       } else {
         // No data found, redirect back to forgot-password
-        router.push('/forgot-password');
+        router.push('/resetPassword/sendResetEmail');
       }
     }
 

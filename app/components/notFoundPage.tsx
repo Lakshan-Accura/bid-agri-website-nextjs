@@ -77,7 +77,7 @@ const NotFoundPage: React.FC = () => {
               type="primary" 
               size="large" 
               icon={<HomeOutlined />}
-              onClick={() => router.push('/storeDashboard')}
+              onClick={() => router.push('dashboards/storeDashboard')}
               style={{
                 height: '48px',
                 padding: '0 32px',

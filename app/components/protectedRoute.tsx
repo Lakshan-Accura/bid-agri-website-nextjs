@@ -28,8 +28,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // Get dashboard route based on roles
   const getDashboardRoute = () => {
-    if (hasTenantAdminRole()) return '/storeDashboard';
-    if (hasFarmerRole()) return '/farmerDashboard';
+    if (hasTenantAdminRole()) return '/dashboards/storeDashboard';
+    if (hasFarmerRole()) return '/dashboards/farmerDashboard';
     return '/';
   };
 

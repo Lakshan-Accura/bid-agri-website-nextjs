@@ -52,11 +52,11 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   };
 
   const handleFarmerLogin = () => {
-    router.push('/farmerLogin');
+    router.push('/logins/farmerLogin');
   };
 
   const handleStoreLogin = () => {
-    router.push('/storeLogin');
+    router.push('/logins/storeLogin');
   };
 
   return (

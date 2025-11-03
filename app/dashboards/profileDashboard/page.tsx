@@ -1,48 +1,50 @@
 'use client';
 
-// protectedProfileDashboard.tsx
 import React, { useEffect, useState } from 'react';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '@/app/store/authStore';
 import { useRouter } from 'next/navigation';
-import StoreDashboard from '../storeDashboard/page';
-import FarmerDashboard from '../farmerDashboard/page';
-import Profile from '../../profile/page';
+import StoreDashboard from '@/app/dashboards/storeDashboard/page';
+import FarmerDashboard from '@/app/dashboards/farmerDashboard/page';
+import Profile from '@/app/profile/page';
 
-function ProtectedProfileDashboard() {
+export default function ProtectedProfileDashboard() {
   const router = useRouter();
   const { isAuthenticated, hasTenantAdminRole, hasFarmerRole, checkAuth } = useAuthStore();
   const [isChecking, setIsChecking] = useState(true);
+  const [userRole, setUserRole] = useState<'store' | 'farmer' | null>(null);
 
   useEffect(() => {
-    // Check authentication on component mount
-    if (typeof window !== 'undefined') {
-      checkAuth();
-      setIsChecking(false);
-    }
+    // ✅ Check auth once component mounts
+    checkAuth();
+
+    // Small delay to simulate check completion
+    setTimeout(() => setIsChecking(false), 300);
   }, [checkAuth]);
 
-  // Show loading while checking authentication
+  useEffect(() => {
+    if (!isChecking) {
+      if (!isAuthenticated) {
+        router.replace('/');
+      } else if (hasTenantAdminRole()) {
+        setUserRole('store');
+      } else if (hasFarmerRole()) {
+        setUserRole('farmer');
+      } else {
+        router.replace('/');
+      }
+    }
+  }, [isChecking, isAuthenticated, hasTenantAdminRole, hasFarmerRole, router]);
+
   if (isChecking) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh' 
-      }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <div>Loading...</div>
       </div>
     );
   }
 
-  // Redirect if not authenticated
-  if (!isAuthenticated) {
-    router.replace('/');
-    return null;
-  }
-
-  // Render appropriate dashboard based on role
-  if (hasTenantAdminRole()) {
+  // ✅ Render based on user role
+  if (userRole === 'store') {
     return (
       <StoreDashboard>
         <Profile />
@@ -50,7 +52,7 @@ function ProtectedProfileDashboard() {
     );
   }
 
-  if (hasFarmerRole()) {
+  if (userRole === 'farmer') {
     return (
       <FarmerDashboard>
         <Profile />
@@ -58,9 +60,5 @@ function ProtectedProfileDashboard() {
     );
   }
 
-  // If user doesn't have required roles, redirect to home
-  router.replace('/');
   return null;
 }
-
-export default ProtectedProfileDashboard;

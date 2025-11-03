@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message, Alert } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { passwordApi, tokenUtils } from '../apiEndpoints/login';
-import type { ChangePasswordRequest } from '../apiEndpoints/login';
+import { passwordApi, tokenUtils } from '../../components/apiEndpoints/login';
+import type { ChangePasswordRequest } from '../../components/apiEndpoints/login';
 import { useRouter } from 'next/navigation';
 
 interface ChangePasswordProps {
@@ -62,12 +62,12 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ userEmail, onSuccess })
           
           // Redirect based on user role
           if (userRoles.includes('TENANT_ADMIN') || userRoles.includes('ROLE_TENANT_ADMIN')) {
-            router.push('/storeLogin');
+            router.push('/logins/storeLogin');
           } else if (userRoles.includes('SYSTEM_USER') || userRoles.includes('ROLE_SYSTEM_USER')) {
-            router.push('/farmerLogin');
+            router.push('/logins/farmerLogin');
           } else {
             // Default fallback
-            router.push('/login');
+            router.push('/');
           }
         }, 1500);
 

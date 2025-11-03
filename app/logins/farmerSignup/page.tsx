@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { registerApi } from '../../components/apiEndpoints/login';
 import { useAuthStore } from '../../store/authStore';
-import MainLayout from '../../components/mainLayout/mainLayout';
+import MainLayout from '../../components/mainLayout/page';
 import backgroundImage from '../../../public/background.jpg';
 import "./farmerSignup.css"
 
@@ -67,7 +67,7 @@ const FarmerSignup: React.FC = () => {
         
         // Redirect to verification page
         setTimeout(() => {
-          router.push('/send-email');
+          router.push('/resetPassword/resendEmail');
         }, 2000);
       } else {
         throw new Error(response.message || 'Registration failed. Please try again.');
@@ -259,7 +259,7 @@ const FarmerSignup: React.FC = () => {
 
           <div className="farmer-signup-footer">
             <Text type="secondary">
-              Already registered? <Link href="/farmerLogin">Login here</Link>
+              Already registered? <Link href="/logins/farmerLogin">Login here</Link>
             </Text>
             <br />
             <Text type="secondary" style={{ fontSize: '12px', marginTop: '8px', display: 'block' }}>

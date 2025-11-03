@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message, Alert, Card } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { passwordApi, tokenUtils } from '../apiEndpoints/login';
-import type { ChangePasswordRequest } from '../apiEndpoints/login';
+import { passwordApi, tokenUtils } from '../../components/apiEndpoints/login';
+import type { ChangePasswordRequest } from '../../components/apiEndpoints/login';
 import { useRouter } from 'next/navigation';
-import MainLayout from '../mainLayout/mainLayout';
+import MainLayout from '../../components/mainLayout/page';
 
 const ChangePasswordInit: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -53,7 +53,7 @@ const ChangePasswordInit: React.FC = () => {
           message.info('Please log in again with your new password');
           
           // Always navigate to '/' regardless of user role
-          router.push('/storeLogin');
+          router.push('/logins/storeLogin');
         }, 1500);
 
       } else {

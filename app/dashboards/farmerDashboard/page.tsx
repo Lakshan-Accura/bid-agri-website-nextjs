@@ -87,7 +87,7 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ children }) => {
         break;
       case 'logout':
         tokenUtils.clearTokens();
-        router.push('/farmerLogin');
+        router.push('/logins/farmerLogin');
         break;
       default:
         break;

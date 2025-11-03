@@ -1,9 +1,11 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { MailOutlined, CheckCircleOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import { passwordApi } from '../apiEndpoints/login';
-import type { ForgotPasswordRequest } from '../apiEndpoints/login';
+import { passwordApi } from '../../components/apiEndpoints/login';
+import type { ForgotPasswordRequest } from '../../components/apiEndpoints/login';
 
 const { Title, Text } = Typography;
 

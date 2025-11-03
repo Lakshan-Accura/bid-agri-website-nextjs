@@ -201,9 +201,9 @@ export const useAuthStore = create<AuthState>()(
       getLoginRedirect: () => {
         const { user } = get();
         if (user?.roles?.includes('TENANT_ADMIN') || user?.roles?.includes('ROLE_TENANT_ADMIN')) {
-          return '/storeLogin';
+          return `logins/storeLogin`;
         } else if (user?.roles?.includes('SYSTEM_USER') || user?.roles?.includes('ROLE_SYSTEM_USER')) {
-          return '/farmerLogin';
+          return `/logins/farmerLogin`;
         }
         return '/';
       },
@@ -212,9 +212,9 @@ export const useAuthStore = create<AuthState>()(
       getDashboardRoute: () => {
         const { user } = get();
         if (user?.roles?.includes('TENANT_ADMIN') || user?.roles?.includes('ROLE_TENANT_ADMIN')) {
-          return '/storeDashboard';
+          return `dashboards/storeDashboard`;
         } else if (user?.roles?.includes('SYSTEM_USER') || user?.roles?.includes('ROLE_SYSTEM_USER')) {
-          return '/farmerDashboard';
+          return `/dashboards/farmerDashboard`;
         }
         return '/';
       },
@@ -250,7 +250,7 @@ export const useAuthStore = create<AuthState>()(
       // ✅ NEW: Get login route for verification page (doesn't require authentication)
       getVerificationLoginRoute: () => {
         const { pendingUserType } = get();
-        return pendingUserType === 'store' ? '/storeLogin' : '/farmerLogin';
+        return pendingUserType === 'store' ? `logins/storeLogin` : `/logins/farmerLogin`;
       },
     }),
     {
