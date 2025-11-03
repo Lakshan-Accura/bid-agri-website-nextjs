@@ -1,0 +1,233 @@
+/* FarmerSignup.css */
+
+/* Page container */
+.farmer-signup-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Signup Card */
+.farmer-signup-card {
+  width: 100%;
+  max-width: 500px; /* Slightly wider for signup form */
+  background: #ffffff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 32px 28px;
+  border-top: 6px solid #2f8f46;
+}
+
+/* Header */
+.farmer-signup-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.farmer-signup-icon {
+  background: #2f8f46;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.farmer-signup-title {
+  color: #2f8f46;
+  margin: 0;
+  font-weight: 600;
+}
+
+.farmer-signup-subtitle {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Form */
+.farmer-signup-form {
+  margin-top: 8px;
+}
+
+/* Form sections for better organization */
+.form-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  color: #2f8f46 !important;
+  margin-bottom: 16px !important;
+  font-weight: 500;
+  font-size: 16px !important;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-item-half {
+  flex: 1;
+}
+
+/* Button */
+.farmer-signup-button {
+  width: 100%;
+  height: 44px;
+  background: linear-gradient(135deg, #2f8f46, #4ac26b) !important;
+  border: none !important;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white !important;
+  transition: all 0.3s ease;
+}
+
+.farmer-signup-button:hover {
+  background: linear-gradient(135deg, #257a3d, #3ba55c) !important;
+  border-color: #257a3d !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(47, 143, 70, 0.3) !important;
+}
+
+.farmer-signup-button:focus {
+  background: linear-gradient(135deg, #257a3d, #3ba55c) !important;
+  border-color: #257a3d !important;
+  box-shadow: 0 0 0 2px rgba(47, 143, 70, 0.2) !important;
+}
+
+.farmer-signup-button:active {
+  background: linear-gradient(135deg, #1e6530, #2f8f46) !important;
+  border-color: #1e6530 !important;
+}
+
+/* Override Ant Design's default blue hover colors */
+.farmer-signup-button.ant-btn-primary:not([disabled]):hover {
+  background: linear-gradient(135deg, #257a3d, #3ba55c) !important;
+  border-color: #257a3d !important;
+}
+
+.farmer-signup-button.ant-btn-primary:not([disabled]):focus {
+  background: linear-gradient(135deg, #257a3d, #3ba55c) !important;
+  border-color: #257a3d !important;
+}
+
+.farmer-signup-button.ant-btn-primary:not([disabled]):active {
+  background: linear-gradient(135deg, #1e6530, #2f8f46) !important;
+  border-color: #1e6530 !important;
+}
+
+/* Loading state */
+.farmer-signup-button.ant-btn-loading {
+  background: linear-gradient(135deg, #2f8f46, #4ac26b) !important;
+  border-color: #2f8f46 !important;
+}
+
+/* Disabled state */
+.farmer-signup-button[disabled] {
+  background: #f5f5f5 !important;
+  border-color: #d9d9d9 !important;
+  color: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Form Input Styles */
+.farmer-signup-form .ant-input:focus,
+.farmer-signup-form .ant-input-focused {
+  border-color: #2f8f46 !important;
+  box-shadow: 0 0 0 2px rgba(47, 143, 70, 0.2) !important;
+}
+
+.farmer-signup-form .ant-input:hover {
+  border-color: #2f8f46 !important;
+}
+
+.farmer-signup-form .ant-input-password:focus,
+.farmer-signup-form .ant-input-password-focused {
+  border-color: #2f8f46 !important;
+  box-shadow: 0 0 0 2px rgba(47, 143, 70, 0.2) !important;
+}
+
+.farmer-signup-form .ant-input-password:hover {
+  border-color: #2f8f46 !important;
+}
+
+.farmer-signup-form .ant-input-textarea:focus,
+.farmer-signup-form .ant-input-textarea-focused {
+  border-color: #2f8f46 !important;
+  box-shadow: 0 0 0 2px rgba(47, 143, 70, 0.2) !important;
+}
+
+.farmer-signup-form .ant-input-textarea:hover {
+  border-color: #2f8f46 !important;
+}
+
+/* Form Labels */
+.farmer-signup-form .ant-form-item-label > label {
+  color: #333 !important;
+  font-weight: 500;
+}
+
+/* Footer links */
+.farmer-signup-footer {
+  text-align: center;
+}
+
+.farmer-signup-footer a {
+  color: #2f8f46;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.farmer-signup-footer a:hover {
+  text-decoration: underline;
+}
+
+.farmer-signup-footer small {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #777;
+}
+
+/* Divider */
+.farmer-signup-card .ant-divider {
+  border-color: #f0f0f0;
+  margin: 20px 0;
+}
+
+.farmer-signup-card .ant-divider-inner-text {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .farmer-signup-card {
+    max-width: 90%;
+    padding: 24px 20px;
+  }
+
+  .farmer-signup-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .farmer-signup-title {
+    font-size: 20px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+/* Ensure body scrolling works */
+body.farmer-signup-active {
+  overflow: auto !important;
+}

@@ -1,0 +1,209 @@
+/* AgriStoreLogin.css */
+
+/* Allow body scrolling to see header and footer */
+body.agri-store-login-active {
+  overflow: auto !important;
+}
+
+/* Page container - allows scrolling */
+.agri-store-login-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 20px; /* Add padding to account for header and footer */
+  position: relative;
+  overflow: visible;
+}
+
+/* Background Image - scrolls with page */
+.agri-store-login-background {
+  position: absolute;
+  top: 72px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../../../public//background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll; /* Changed from fixed to scroll */
+  z-index: -2;
+  height: 777px;
+}
+
+/* Login card */
+.agri-store-login-card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  padding: 32px 28px;
+  border-top: 6px solid #2f8f46;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header section */
+.agri-store-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.agri-store-icon {
+  background: #2f8f46;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.agri-store-title {
+  color: #2f8f46;
+  font-weight: 600;
+  margin: 0;
+}
+
+.agri-store-subtitle {
+  color: #666;
+  font-size: 14px;
+}
+
+/* Form */
+.agri-store-form {
+  margin-top: 8px;
+}
+
+/* Form Input Styles */
+.agri-store-form .ant-input:focus,
+.agri-store-form .ant-input-focused {
+  border-color: #2f8f46 !important;
+  box-shadow: 0 0 0 2px rgba(47, 143, 70, 0.2) !important;
+}
+
+.agri-store-form .ant-input:hover {
+  border-color: #2f8f46 !important;
+}
+
+.agri-store-form .ant-input-password:focus,
+.agri-store-form .ant-input-password-focused {
+  border-color: #2f8f46 !important;
+  box-shadow: 0 0 0 2px rgba(47, 143, 70, 0.2) !important;
+}
+
+.agri-store-form .ant-input-password:hover {
+  border-color: #2f8f46 !important;
+}
+
+/* Submit button */
+.agri-store-button {
+  width: 100%;
+  height: 44px;
+  background: linear-gradient(135deg, #2f8f46, #4ac26b) !important;
+  border: none !important;
+  border-radius: 8px;
+  color: white !important;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.agri-store-button:hover {
+  background: linear-gradient(135deg, #257a3d, #3ba55c) !important;
+  border-color: #257a3d !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(47, 143, 70, 0.3) !important;
+}
+
+.agri-store-button:focus {
+  background: linear-gradient(135deg, #257a3d, #3ba55c) !important;
+  border-color: #257a3d !important;
+  box-shadow: 0 0 0 2px rgba(47, 143, 70, 0.2) !important;
+}
+
+.agri-store-button:active {
+  background: linear-gradient(135deg, #1e6530, #2f8f46) !important;
+  border-color: #1e6530 !important;
+}
+
+/* Override Ant Design's default blue hover colors */
+.agri-store-button.ant-btn-primary:not([disabled]):hover {
+  background: linear-gradient(135deg, #257a3d, #3ba55c) !important;
+  border-color: #257a3d !important;
+}
+
+.agri-store-button.ant-btn-primary:not([disabled]):focus {
+  background: linear-gradient(135deg, #257a3d, #3ba55c) !important;
+  border-color: #257a3d !important;
+}
+
+.agri-store-button.ant-btn-primary:not([disabled]):active {
+  background: linear-gradient(135deg, #1e6530, #2f8f46) !important;
+  border-color: #1e6530 !important;
+}
+
+/* Loading state */
+.agri-store-button.ant-btn-loading {
+  background: linear-gradient(135deg, #2f8f46, #4ac26b) !important;
+  border-color: #2f8f46 !important;
+}
+
+/* Disabled state */
+.agri-store-button[disabled] {
+  background: #f5f5f5 !important;
+  border-color: #d9d9d9 !important;
+  color: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Footer links */
+.agri-store-footer {
+  text-align: center;
+}
+
+.agri-store-footer a {
+  color: #2f8f46;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.agri-store-footer a:hover {
+  text-decoration: underline;
+}
+
+.agri-store-footer small {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #777;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .agri-store-login-page {
+    padding: 80px 16px;
+  }
+
+  .agri-store-login-card {
+    max-width: 90%;
+    padding: 24px 20px;
+  }
+
+  .agri-store-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .agri-store-title {
+    font-size: 20px;
+  }
+}
+
+/* Ensure MainLayout content area allows scrolling */
+.agri-store-login-container .ant-layout-content {
+  overflow: auto !important;
+}
