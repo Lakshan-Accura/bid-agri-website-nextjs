@@ -52,7 +52,7 @@ const AgriStoreLogin: React.FC = () => {
 
         // ✅ Navigate to dashboard after token is set
         setTimeout(() => {
-          router.push('/storeDashboard');
+          router.push('/dashboards/storeDashboard');
         }, 300);
       } else {
         // Handle API error responses

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import {
   UserOutlined,
@@ -18,7 +20,7 @@ import {
 } from 'antd';
 import type { MenuProps } from 'antd';
 import { useRouter, usePathname } from 'next/navigation';
-import { tokenUtils } from '../apiEndpoints/login';
+import { tokenUtils } from '../../components/apiEndpoints/login';
 import Image from 'next/image';
 import logo from '../../../public/logo.png';
 

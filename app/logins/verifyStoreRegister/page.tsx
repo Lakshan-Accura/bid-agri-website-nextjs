@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import {
   Form,
@@ -49,7 +51,7 @@ const VerifyStoreRegister: React.FC = () => {
         message.success('Store registration verified successfully!');
         
         setTimeout(() => {
-          router.push('/storeLogin');
+          router.push('/logins/storeLogin');
         }, 3000);
       } else {
         console.log('Verification failed with response:', response);
@@ -75,7 +77,7 @@ const VerifyStoreRegister: React.FC = () => {
   };
 
   const handleBackToLogin = (): void => {
-    router.push('/storeLogin');
+    router.push('/logins/storeLogin');
   };
 
   const handleTryAgain = (): void => {

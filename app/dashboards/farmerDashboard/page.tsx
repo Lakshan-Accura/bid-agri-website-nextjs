@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import {
   UserOutlined,
@@ -20,7 +22,7 @@ import {
 import type { MenuProps } from 'antd';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { tokenUtils } from '../apiEndpoints/login';
+import { tokenUtils } from '../../components/apiEndpoints/login';
 import logo from '../../../public/logo.png';
 
 const { Header, Content, Footer } = Layout;

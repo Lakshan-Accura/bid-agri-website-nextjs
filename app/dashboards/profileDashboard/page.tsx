@@ -1,9 +1,11 @@
+'use client';
+
 // protectedProfileDashboard.tsx
 import React, { useEffect, useState } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { useRouter } from 'next/navigation';
-import StoreDashboard from '../dashboards/storeDashboard';
-import FarmerDashboard from './farmerDashboard';
+import StoreDashboard from '../storeDashboard/page';
+import FarmerDashboard from '../farmerDashboard/page';
 import Profile from '../../profile/page';
 
 function ProtectedProfileDashboard() {

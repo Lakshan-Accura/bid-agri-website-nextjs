@@ -52,7 +52,7 @@ const VerifyStoreRegister: React.FC = () => {
         message.success('Store registration verified successfully!');
         
         setTimeout(() => {
-          router.push('/FarmerLogin');
+          router.push('/logins/FarmerLogin');
         }, 3000);
       } else {
         console.log('Verification failed with response:', response);
@@ -78,7 +78,7 @@ const VerifyStoreRegister: React.FC = () => {
   };
 
   const handleBackToLogin = (): void => {
-    router.push('/storeLogin');
+    router.push('/logins/storeLogin');
   };
 
   const handleTryAgain = (): void => {
@@ -101,8 +101,8 @@ const VerifyStoreRegister: React.FC = () => {
         <Card style={{ maxWidth: 500, width: '100%', textAlign: 'center' }}>
           <Result
             icon={<CheckCircleOutlined style={{ color: '#52c41a' }} />}
-            title="Store Registration Verified Successfully!"
-            subTitle="Your store registration has been verified. Redirecting to login..."
+            title="Farmer Registration Verified Successfully!"
+            subTitle="Farmer registration has been verified. Redirecting to login..."
             extra={[
               <Button 
                 key="login" 
