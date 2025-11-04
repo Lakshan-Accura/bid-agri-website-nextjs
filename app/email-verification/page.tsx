@@ -11,9 +11,7 @@ const EmailVerification: React.FC = () => {
   const [message, setMessage] = useState<string>("Verifying your email, please wait...");
 
   useEffect(() => {
-    // 1️⃣ Extract token from the URL
     const token = searchParams.get("token");
-
     console.log("✅ Verification token from URL:", token);
 
     if (!token) {
@@ -22,13 +20,10 @@ const EmailVerification: React.FC = () => {
       return;
     }
 
-    // 2️⃣ Save token in localStorage (client-side only)
     if (typeof window !== 'undefined') {
       localStorage.setItem("emailVerificationToken", token);
-      console.log("💾 Token saved to localStorage:", token);
     }
 
-    // 3️⃣ Send GET request to backend for verification
     const verifyEmail = async () => {
       try {
         const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
@@ -60,12 +55,9 @@ const EmailVerification: React.FC = () => {
     verifyEmail();
   }, [searchParams]);
 
-  // 4️⃣ Render results
   if (status === "loading") {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <Spin size="large" tip="Verifying your email..." />
-      </div>
+      <Spin fullscreen tip="Verifying your email..." />
     );
   }
 
@@ -78,11 +70,11 @@ const EmailVerification: React.FC = () => {
           subTitle={message}
           extra={[
             <Space key="buttons" direction="vertical" style={{ width: '100%' }} size="middle">
-              <Button 
-                type="primary" 
-                key="farmer-login" 
+              <Button
+                type="primary"
+                key="farmer-login"
                 onClick={() => router.push('/logins/farmerLogin')}
-                style={{ 
+                style={{
                   background: '#52c41a',
                   borderColor: '#52c41a',
                   width: '200px'
@@ -90,11 +82,11 @@ const EmailVerification: React.FC = () => {
               >
                 Login as Farmer
               </Button>,
-              <Button 
-                type="primary" 
-                key="store-login" 
+              <Button
+                type="primary"
+                key="store-login"
                 onClick={() => router.push('/logins/storeLogin')}
-                style={{ 
+                style={{
                   background: '#1890ff',
                   borderColor: '#1890ff',
                   width: '200px'

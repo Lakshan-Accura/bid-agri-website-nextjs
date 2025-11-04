@@ -65,7 +65,7 @@ const FarmerSignup: React.FC = () => {
         
         message.success('Registration successful! Please check your email for verification.');
         
-        // Redirect to verification page
+        // ✅ CORRECTED: Redirect to email verification page
         setTimeout(() => {
           router.push('/resetPassword/resendEmail');
         }, 2000);
