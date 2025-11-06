@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message, Alert } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { passwordApi, tokenUtils } from '../../components/apiEndpoints/login';
-import type { ChangePasswordRequest } from '../../components/apiEndpoints/login';
+import { passwordApi, tokenUtils } from '../components/apiEndpoints/login';
+import type { ChangePasswordRequest } from '../components/apiEndpoints/login';
 import { useRouter } from 'next/navigation';
 
 interface ChangePasswordProps {

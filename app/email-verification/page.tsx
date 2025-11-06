@@ -26,7 +26,7 @@ const EmailVerification: React.FC = () => {
 
     const verifyEmail = async () => {
       try {
-        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1';
+        const API_BASE_URL = 'http://localhost:8080/api/v1';
         const response = await fetch(
           `${API_BASE_URL}/user/verifyRegistration?token=${encodeURIComponent(token)}`
         );
@@ -85,7 +85,7 @@ const EmailVerification: React.FC = () => {
               <Button
                 type="primary"
                 key="store-login"
-                onClick={() => router.push('/logins/storeLogin')}
+                onClick={() => router.push('/resetPassword/changePasswordInit')}
                 style={{
                   background: '#1890ff',
                   borderColor: '#1890ff',

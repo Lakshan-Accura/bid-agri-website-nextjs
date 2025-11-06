@@ -23,6 +23,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { tokenUtils } from '../../components/apiEndpoints/login';
 import Image from 'next/image';
 import logo from '../../../public/logo.png';
+import ProtectedRoute from '@/app/components/protectedRoute';
 
 const { Header, Content, Footer } = Layout;
 const { Title, Text } = Typography;
@@ -143,7 +144,8 @@ const StoreDashboard: React.FC<StoreDashboardProps> = ({ children }) => {
     );
   }
 
-  return (
+ return (
+  <ProtectedRoute requiredRoles="TENANT_ADMIN">
     <Layout style={{ minHeight: '100vh' }}>
       {/* Header with Navigation */}
       <Header style={{ 
@@ -237,7 +239,9 @@ const StoreDashboard: React.FC<StoreDashboardProps> = ({ children }) => {
         </Text>
       </Footer>
     </Layout>
-  );
+  </ProtectedRoute>
+);
+
 };
 
 export default StoreDashboard;

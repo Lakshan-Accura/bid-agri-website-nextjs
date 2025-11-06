@@ -367,3 +367,4 @@ export const verifyRegistration = async (token: string): Promise<VerifyRegistrat
 
   return await response.json();
 };
+

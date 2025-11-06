@@ -24,6 +24,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { tokenUtils } from '../../components/apiEndpoints/login';
 import logo from '../../../public/logo.png';
+import ProtectedRoute from '@/app/components/protectedRoute';
 
 const { Header, Content, Footer } = Layout;
 const { Title, Text } = Typography;
@@ -113,6 +114,7 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ children }) => {
   );
 
   return (
+  <ProtectedRoute requiredRoles="SYSTEM_USER">
     <Layout style={{ minHeight: '100vh' }}>
       {/* Header with Navigation */}
       <Header style={{ 
@@ -213,6 +215,7 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ children }) => {
         </Text>
       </Footer>
     </Layout>
+    </ProtectedRoute>
   );
 };
 

@@ -13,7 +13,7 @@ import {
   LockOutlined,
   UserOutlined
 } from "@ant-design/icons";
-import ChangePassword from "../resetPassword/changePassword/page";
+import ChangePassword from "../changePassword/page";
 import { tokenUtils } from "../components/apiEndpoints/login";
 
 interface UserProfile {

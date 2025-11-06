@@ -17,7 +17,7 @@ const ChangePasswordRedirect: React.FC = () => {
       sessionStorage.setItem('resetEmail', email);
       
       // Redirect to reset-password
-      router.push('/resetPassword/resetPasswordForm');
+      router.push('/resetPasswordForm');
     } else {
       // If no parameters, redirect to forgot-password
       router.push('/resetPassword/sendResetEmail');
