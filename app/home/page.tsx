@@ -1,13 +1,36 @@
 'use client'
 
+import { Button, Space } from 'antd'
+import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react'
+import { 
+  ShopOutlined, 
+  UserOutlined, 
+  EnvironmentOutlined 
+} from '@ant-design/icons';
 
 export default function Home() {
+
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeRole, setActiveRole] = useState('farmer')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const catGridRef = useRef<HTMLDivElement | null>(null);
   const stepsScrollRef = useRef<HTMLDivElement | null>(null)
+
+    useEffect(() => {
+    // Small delay to ensure page is fully loaded
+    const timer = setTimeout(() => {
+      window.scrollTo({
+        top: 80, // Adjust this value for how much to scroll down
+        behavior: 'smooth'
+      });
+    }, 50); // 500ms delay
+
+    return () => clearTimeout(timer)
+  }, [])
+
+
 
   // Mobile Menu Functions
   const toggleMenu = () => {
@@ -214,6 +237,15 @@ export default function Home() {
     }
   ]
 
+    const handleFarmerLogin = () => {
+    router.push('/logins/farmerLogin');
+  };
+
+  const handleStoreLogin = () => {
+    router.push('/logins/storeLogin');
+  };
+
+
   return (
     <>
       <style jsx global>{`
@@ -276,6 +308,9 @@ export default function Home() {
             <a href="#about" onClick={closeMenu}>About Us</a>
             <img src="/images/auction-bid.png" alt="Auction" className="header-auction-img" />
             <a href="#contact" className="cta" onClick={closeMenu}>Auction</a>
+            {/* <a href="/logins/farmerLogin" onClick={handleFarmerLogin}>Farmer Login</a>
+            <a href="/logins/storeLogin" onClick={handleStoreLogin}>Store Login</a> */}
+          
           </nav>
         </div>
       </header>
@@ -343,19 +378,20 @@ export default function Home() {
             <div 
               className={`workflow-pill ${activeRole === 'farmer' ? 'active' : ''}`} 
               data-role="farmer"
-              onClick={() => setActiveRole('farmer')}
+              onClick={handleFarmerLogin}
             >
               I'm a Farmer
             </div>
             <div 
               className={`workflow-pill ${activeRole === 'merchant' ? 'active' : ''}`} 
               data-role="merchant"
-              onClick={() => setActiveRole('merchant')}
+              onClick={handleStoreLogin}
             >
               I'm a Merchant
             </div>
           </div>
-          
+
+
           {/* Add your steps content here based on activeRole */}
         </div>
       </section>

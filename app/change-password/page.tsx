@@ -1,39 +1,11 @@
 'use client';
+import { Suspense } from 'react';
+import ChangePasswordRedirect from './redirect';
 
-import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-
-const ChangePasswordRedirect: React.FC = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const token = searchParams.get('token');
-    const email = searchParams.get('email');
-    
-    if (token && email) {
-      // Store in sessionStorage to pass to ResetPasswordForm
-      sessionStorage.setItem('resetToken', token);
-      sessionStorage.setItem('resetEmail', email);
-      
-      // Redirect to reset-password
-      router.push('/resetPasswordForm');
-    } else {
-      // If no parameters, redirect to forgot-password
-      router.push('/resetPassword/sendResetEmail');
-    }
-  }, [searchParams, router]);
-
+export default function ChangePasswordPage() {
   return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      height: '100vh' 
-    }}>
-      Redirecting...
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <ChangePasswordRedirect />
+    </Suspense>
   );
-};
-
-export default ChangePasswordRedirect;
+}
