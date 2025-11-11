@@ -3,6 +3,8 @@
 import { Button, Space } from 'antd'
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react'
+import './home.css'
+
 import { 
   ShopOutlined, 
   UserOutlined, 
