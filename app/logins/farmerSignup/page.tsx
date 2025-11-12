@@ -5,7 +5,7 @@ import { Form, Input, Button, Card, Typography, Divider, Alert, Spin, message } 
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { registerApi } from '../../components/apiEndpoints/login';
+import { registerApi } from '../../components/apiEndpoints/login/login';
 import { useAuthStore } from '../../store/authStore';
 import MainLayout from '../../components/mainLayout/page';
 import backgroundImage from '../../../public/background.jpg';

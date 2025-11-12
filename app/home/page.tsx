@@ -1,9 +1,10 @@
 'use client'
 
-import { Button, Space } from 'antd'
+import { Button, message, Space } from 'antd'
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react'
 import './home.css'
+import { productCategoriesApi, type productCategory } from '../components/apiEndpoints/productCategory/productCategory';
 
 import { 
   ShopOutlined, 
@@ -16,11 +17,14 @@ export default function Home() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeRole, setActiveRole] = useState('farmer')
-  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const catGridRef = useRef<HTMLDivElement | null>(null);
   const stepsScrollRef = useRef<HTMLDivElement | null>(null)
+  const [loading, setLoading] = useState<boolean>(true);
+  const [productCategories, setProductCategories] = useState<productCategory[]>([]);
+  const [allCategories, setAllCategories] = useState<productCategory[]>([]);
 
-    useEffect(() => {
+  useEffect(() => {
     // Small delay to ensure page is fully loaded
     const timer = setTimeout(() => {
       window.scrollTo({
@@ -32,7 +36,44 @@ export default function Home() {
     return () => clearTimeout(timer)
   }, [])
 
+  // Fetch all lots
+  const fetchProductCategories = async () => {
+    try {
+      setLoading(true);
+      const response = await productCategoriesApi.getAllProductCategories();
 
+      if (response.payloadDto) {
+        // Store all categories for filtering
+        setAllCategories(response.payloadDto);
+        
+        // For the dropdown, only show parent categories (where id === parentId)
+        const parentCategories = response.payloadDto.filter(
+          (cat) => cat.parentId === cat.id
+        );
+
+        // Optional: Add fallback image if missing
+        const categoriesWithImages = parentCategories.map((cat) => ({
+          ...cat,
+          imageUrl:
+            cat.imageUrl ||
+            `/images/categories/default-${cat.id % 7}.jpg`, // fallback pattern
+        }));
+
+        setProductCategories(categoriesWithImages);
+      } else {
+        message.error("Failed to load product categories");
+      }
+    } catch (error: any) {
+      console.error("Error fetching product categories:", error);
+      message.error(error.message || "Failed to load product categories");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProductCategories();
+  }, []);
 
   // Mobile Menu Functions
   const toggleMenu = () => {
@@ -46,11 +87,11 @@ export default function Home() {
   }
 
   // Contact Form Handler
-    const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     alert("Thank you! We'll get back to you within 1-2 business days.");
     e.currentTarget.reset(); // safer than e.target.reset()
-    };
+  };
 
   // Category Navigation
   const scrollCategories = (direction: 'next' | 'prev') => {
@@ -159,6 +200,7 @@ export default function Home() {
       '/images/hero/istockphoto-1265550249-2048x2048.jpg',
       '/images/hero/istockphoto-1960246100-2048x2048.jpg'
     ]
+
     
     let currentIndex = 0
     
@@ -184,20 +226,12 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
 
-  // Category Filtering
-  const categories = [
-    { id: 'animal-remedies', label: 'Animal Remedies', image: '/images/categories/istockphoto-2168017549-2048x2048.jpg' },
-    { id: 'dairy', label: 'Dairy', image: '/images/categories/istockphoto-1343674453-2048x2048.jpg' },
-    { id: 'calving-lambing', label: 'Calving and Lambing', image: '/images/categories/istockphoto-1289281917-2048x2048.jpg' },
-    { id: 'grassland-harvest', label: 'Grassland and Harvest', image: '/images/categories/istockphoto-476573454-2048x2048.jpg' },
-    { id: 'feed-fertilizer', label: 'Feed and Fertilizer', image: '/images/categories/istockphoto-1141422847-2048x2048.jpg' },
-    { id: 'farm-equipment', label: 'Farm Equipment', image: '/images/categories/istockphoto-1166015650-2048x2048.jpg' },
-    { id: 'hoof-care', label: 'Hoof Care', image: '/images/categories/istockphoto-875237114-2048x2048.jpg' }
-  ]
-
+  // Category Filtering - Show subcategories of selected main category
   const filteredCategories = selectedCategory === 'all' 
-    ? categories 
-    : categories.filter(cat => cat.id === selectedCategory)
+    ? allCategories // Show all categories when "All Categories" is selected
+    : allCategories.filter(cat => 
+        cat.parentId?.toString() === selectedCategory // Show categories with matching parentId
+      )
 
   // FAQ Data
   const faqData = [
@@ -239,14 +273,13 @@ export default function Home() {
     }
   ]
 
-    const handleFarmerLogin = () => {
+  const handleFarmerLogin = () => {
     router.push('/logins/farmerLogin');
   };
 
   const handleStoreLogin = () => {
     router.push('/logins/storeLogin');
   };
-
 
   return (
     <>
@@ -285,6 +318,26 @@ export default function Home() {
           opacity: 1;
         }
         
+        /* Category badge styles */
+        .cat-subcategory-badge {
+          background: rgba(255, 255, 255, 0.9);
+          color: #333;
+          padding: 2px 8px;
+          border-radius: 12px;
+          font-size: 0.7rem;
+          font-weight: 600;
+          margin-top: 5px;
+          display: inline-block;
+        }
+        
+        .loading-message, .no-categories-message {
+          text-align: center;
+          padding: 2rem;
+          font-size: 1.1rem;
+          color: #666;
+          grid-column: 1 / -1;
+        }
+        
         /* Continue with all your existing CSS rules... */
       `}</style>
 
@@ -310,9 +363,6 @@ export default function Home() {
             <a href="#about" onClick={closeMenu}>About Us</a>
             <img src="/images/auction-bid.png" alt="Auction" className="header-auction-img" />
             <a href="#contact" className="cta" onClick={closeMenu}>Auction</a>
-            {/* <a href="/logins/farmerLogin" onClick={handleFarmerLogin}>Farmer Login</a>
-            <a href="/logins/storeLogin" onClick={handleStoreLogin}>Store Login</a> */}
-          
           </nav>
         </div>
       </header>
@@ -334,13 +384,13 @@ export default function Home() {
             </div>
           </div>
           
-            <div
+          <div
             className="scroll-indicator"
             onClick={() => {
                 const target = document.querySelector('.features');
                 if (target) target.scrollIntoView({ behavior: 'smooth' });
             }}
-            >
+          >
             <div className="scroll-text">Scroll Down</div>
             <div className="scroll-arrow">↓</div>
           </div>
@@ -392,9 +442,6 @@ export default function Home() {
               I'm a Merchant
             </div>
           </div>
-
-
-          {/* Add your steps content here based on activeRole */}
         </div>
       </section>
 
@@ -427,34 +474,47 @@ export default function Home() {
         
         <div className="category-filter">
           <label htmlFor="mainCategorySelect">Select Main Category:</label>
-          <select 
-            id="mainCategorySelect" 
+          <select
+            id="mainCategorySelect"
             className="category-dropdown"
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
           >
             <option value="all">All Categories</option>
-            <option value="animal-remedies">Animal Remedies</option>
-            <option value="dairy">Dairy</option>
-            <option value="calving-lambing">Calving and Lambing</option>
-            <option value="grassland-harvest">Grassland and Harvest</option>
-            <option value="feed-fertilizer">Feed and Fertilizer</option>
-            <option value="farm-equipment">Farm Equipment</option>
-            <option value="hoof-care">Hoof Care</option>
+            {productCategories.map((category) => (
+              <option key={category.id} value={category.id.toString()}>
+                {category.name}
+              </option>
+            ))}
           </select>
         </div>
         
         <div className="cat-container">
           <button className="cat-nav-btn prev" onClick={() => scrollCategories('prev')}>‹</button>
           <div className="cats-grid" ref={catGridRef}>
-            {filteredCategories.map((category) => (
-              <div key={category.id} className="cat-grid-item" data-category={category.id}>
-                <img src={category.image} alt={category.label} />
-                <div className="cat-title-area">
-                  <div className="cat-label">{category.label}</div>
+            {loading ? (
+              <div className="loading-message">Loading categories...</div>
+            ) : filteredCategories.length > 0 ? (
+              filteredCategories.map((category) => (
+                <div key={category.id} className="cat-grid-item" data-category={category.id}>
+                  <img 
+                    src={category.imageUrl || `/images/categories/default.jpg`} 
+                    alt={category.name} 
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/images/categories/default.jpg';
+                    }}
+                  />
+                  <div className="cat-title-area">
+                    <div className="cat-label">{category.name}</div>
+                    {category.parentId !== category.id && (
+                      <div className="cat-subcategory-badge">Subcategory</div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <div className="no-categories-message">No categories found for this selection</div>
+            )}
           </div>
           <button className="cat-nav-btn next" onClick={() => scrollCategories('next')}>›</button>
         </div>

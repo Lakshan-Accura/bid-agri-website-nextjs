@@ -1,7 +1,7 @@
 // stores/authStore.tsx
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { tokenUtils, authApi } from '../components/apiEndpoints/login';
+import { tokenUtils, authApi } from '../components/apiEndpoints/login/login';
 
 interface User {
   id?: string;

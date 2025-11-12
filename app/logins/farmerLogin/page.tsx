@@ -5,7 +5,7 @@ import { Form, Input, Button, Card, Typography, Divider, Alert, Spin, message } 
 import { UserOutlined, LockOutlined, TruckOutlined, MailOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { authApi, tokenUtils, type LoginRequest } from '../../components/apiEndpoints/login';
+import { authApi, tokenUtils, type LoginRequest } from '../../components/apiEndpoints/login/login';
 import MainLayout from '../../components/mainLayout/page';
 import backgroundImage from '../../../public/background.jpg';
 import "./farmerLogin.css"

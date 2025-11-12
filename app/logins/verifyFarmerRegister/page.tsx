@@ -20,7 +20,7 @@ import {
   ArrowLeftOutlined,
   MailOutlined
 } from '@ant-design/icons';
-import { verifyRegistration } from '../../components/apiEndpoints/login';
+import { verifyRegistration } from '../../components/apiEndpoints/login/login';
 import router from 'next/router'; 
 import Link from 'next/link';
 

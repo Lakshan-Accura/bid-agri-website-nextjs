@@ -5,8 +5,8 @@ import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { LockOutlined, KeyOutlined, ArrowLeftOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { passwordApi } from '../components/apiEndpoints/login';
-import type { ResetPasswordRequest } from '../components/apiEndpoints/login';
+import { passwordApi } from '../components/apiEndpoints/login/login';
+import type { ResetPasswordRequest } from '../components/apiEndpoints/login/login';
 
 const { Title, Text } = Typography;
 

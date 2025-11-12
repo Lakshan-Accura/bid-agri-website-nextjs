@@ -5,7 +5,7 @@ import { Form, Input, Button, Card, Typography, Alert, Spin, message } from 'ant
 import { UserOutlined, LockOutlined, ShopOutlined, MailOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { authApi, tokenUtils, type LoginRequest } from '../../components/apiEndpoints/login';
+import { authApi, tokenUtils, type LoginRequest } from '../../components/apiEndpoints/login/login';
 import MainLayout from '../../components/mainLayout/page';
 import './storeLogin.css';
 

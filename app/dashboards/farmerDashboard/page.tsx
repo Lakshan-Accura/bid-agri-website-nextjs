@@ -22,7 +22,7 @@ import {
 import type { MenuProps } from 'antd';
 import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { tokenUtils } from '../../components/apiEndpoints/login';
+import { tokenUtils } from '../../components/apiEndpoints/login/login';
 import logo from '../../../public/logo.png';
 import ProtectedRoute from '@/app/components/protectedRoute';
 

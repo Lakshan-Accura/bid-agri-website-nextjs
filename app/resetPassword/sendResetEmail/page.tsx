@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Card, Typography, message } from 'antd';
 import { MailOutlined, CheckCircleOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import { passwordApi } from '../../components/apiEndpoints/login';
-import type { ForgotPasswordRequest } from '../../components/apiEndpoints/login';
+import { passwordApi } from '../../components/apiEndpoints/login/login';
+import type { ForgotPasswordRequest } from '../../components/apiEndpoints/login/login';
 
 const { Title, Text } = Typography;
 

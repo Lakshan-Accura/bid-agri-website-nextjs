@@ -22,7 +22,7 @@ import {
 } from '@ant-design/icons';
 import router from 'next/router'; 
 import Link from 'next/link';
-import { verifyRegistration } from '../../components/apiEndpoints/login';
+import { verifyRegistration } from '../../components/apiEndpoints/login/login';
 
 
 const { Title, Text } = Typography;

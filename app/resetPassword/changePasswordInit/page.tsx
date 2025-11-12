@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message, Alert, Card } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { passwordApi, tokenUtils } from '../../components/apiEndpoints/login';
-import type { ChangePasswordRequest } from '../../components/apiEndpoints/login';
+import { passwordApi, tokenUtils } from '../../components/apiEndpoints/login/login';
+import type { ChangePasswordRequest } from '../../components/apiEndpoints/login/login';
 import { useRouter } from 'next/navigation';
 import MainLayout from '../../components/mainLayout/page';
 

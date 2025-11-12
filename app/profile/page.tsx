@@ -14,7 +14,7 @@ import {
   UserOutlined
 } from "@ant-design/icons";
 import ChangePassword from "../changePassword/page";
-import { tokenUtils } from "../components/apiEndpoints/login";
+import { tokenUtils } from "../components/apiEndpoints/login/login";
 
 interface UserProfile {
   email: string;
