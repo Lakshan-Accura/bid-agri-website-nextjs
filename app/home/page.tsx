@@ -281,7 +281,7 @@ export default function Home() {
     router.push('/logins/storeLogin');
   };
 
-  return (
+return (
     <>
       <style jsx global>{`
         /* Copy your entire CSS file content here */
@@ -336,6 +336,86 @@ export default function Home() {
           font-size: 1.1rem;
           color: #666;
           grid-column: 1 / -1;
+        }
+
+        /* Workflow Panel Styles */
+        .workflow-panels {
+          margin-top: 3rem;
+        }
+
+        .workflow-panel {
+          display: none;
+        }
+
+        .workflow-panel.active {
+          display: block;
+        }
+
+        .steps-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(300px, 1fr));
+          gap: 2rem;
+          margin-top: 2rem;
+        }
+
+        .steps-grid.merchant {
+          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+          max-width: 1200px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .step-card {
+          background: rgba(255,255,255,0.06);
+          border-radius: 12px;
+          padding: 1.5rem;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .step-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .step-media {
+          position: relative;
+          margin-bottom: 1rem;
+        }
+
+        .step-media img {
+          width: 100%;
+          object-fit: cover;
+          border-radius: 8px;
+        }
+
+        .step-count {
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          background: #1ebe0fff;
+          color: white;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          font-size: 1.2rem;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .step-card h3 {
+          color: #333;
+          margin-bottom: 0.5rem;
+          font-size: 1.3rem;
+        }
+
+        .step-card p {
+          color: #666;
+          line-height: 1.5;
+          margin: 0;
         }
         
         /* Continue with all your existing CSS rules... */
@@ -442,6 +522,90 @@ export default function Home() {
               I'm a Merchant
             </div>
           </div>
+
+          {/* Workflow Panels */}
+          <div className="workflow-panels">
+            <div className={`workflow-panel ${activeRole === 'farmer' ? 'active' : ''}`} data-role="farmer">
+              <div className="steps-grid">
+                <div className="step-card">
+                  <div className="step-media">
+                    <img src="/images/hero/istockphoto-1265550249-2048x2048.jpg" alt="Farmer registering on BidAgri" />
+                    <span className="step-count">1</span>
+                  </div>
+                  <h3>Register</h3>
+                  <p>Create your BidAgri profile with farm details, contact information, and delivery locations.</p>
+                </div>
+                <div className="step-card">
+                  <div className="step-media">
+                    <img src="/images/categories/istockphoto-1141422847-2048x2048.jpg" alt="Adding farm supplies to cart" />
+                    <span className="step-count">2</span>
+                  </div>
+                  <h3>Add Products</h3>
+                  <p>List the supplies you need, including quantities, preferred brands, and delivery timelines.</p>
+                </div>
+                <div className="step-card">
+                  <div className="step-media">
+                    <img src="/images/hero/istockphoto-140462837-2048x2048.jpg" alt="Setting a pricing benchmark" />
+                    <span className="step-count">3</span>
+                  </div>
+                  <h3>Set Base Price</h3>
+                  <p>Share the price you currently pay so merchants can pitch their best bids with confidence.</p>
+                </div>
+                <div className="step-card">
+                  <div className="step-media">
+                    <img src="/images/hero/istockphoto-493539809-2048x2048.jpg" alt="BidAgri team reviewing request" />
+                    <span className="step-count">4</span>
+                  </div>
+                  <h3>Get Approval</h3>
+                  <p>We verify your request, make sure everything is clear, and alert the right suppliers.</p>
+                </div>
+                <div className="step-card">
+                  <div className="step-media">
+                    <img src="/images/hero/istockphoto-1960246100-2048x2048.jpg" alt="Live auction bids coming in" />
+                    <span className="step-count">5</span>
+                  </div>
+                  <h3>Start Auction</h3>
+                  <p>Launch a live reverse auction and track real-time bids from trusted Irish merchants.</p>
+                </div>
+                <div className="step-card">
+                  <div className="step-media">
+                    <img src="/images/hero/istockphoto-2235542580-2048x2048.jpg" alt="Farmer completing secure payment" />
+                    <span className="step-count">6</span>
+                  </div>
+                  <h3>Pay the Winner</h3>
+                  <p>Select the winning bid, arrange fulfilment, and pay securely through BidAgri's escrow.</p>
+                </div>
+              </div>
+            </div>
+            <div className={`workflow-panel ${activeRole === 'merchant' ? 'active' : ''}`} data-role="merchant">
+              <div className="steps-grid merchant">
+                <div className="step-card">
+                  <div className="step-media">
+                    <img src="/images/hero/istockphoto-510581590-2048x2048.jpg" alt="Merchant onboarding with BidAgri team" />
+                    <span className="step-count">1</span>
+                  </div>
+                  <h3>Get Onboarded</h3>
+                  <p>Register your agri business, provide verification docs, and unlock access to pre-qualified farmers.</p>
+                </div>
+                <div className="step-card">
+                  <div className="step-media">
+                    <img src="/images/hero/istockphoto-92024115-2048x2048.jpg" alt="Merchant placing live bids" />
+                    <span className="step-count">2</span>
+                  </div>
+                  <h3>Start Bidding</h3>
+                  <p>Receive instant auction alerts, review farmer requirements, and submit competitive real-time bids.</p>
+                </div>
+                <div className="step-card">
+                  <div className="step-media">
+                    <img src="/images/hero/istockphoto-493539809-2048x2048.jpg" alt="Merchant completing delivery and getting paid" />
+                    <span className="step-count">3</span>
+                  </div>
+                  <h3>Win & Receive Payments</h3>
+                  <p>Win the lot, fulfil the order, and get paid securely through BidAgri's escrow once delivery is confirmed.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -498,7 +662,7 @@ export default function Home() {
               filteredCategories.map((category) => (
                 <div key={category.id} className="cat-grid-item" data-category={category.id}>
                   <img 
-                    src={category.imageUrl || `/images/categories/default.jpg`} 
+                    src={category.imageUrl} 
                     alt={category.name} 
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = '/images/categories/default.jpg';

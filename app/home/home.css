@@ -277,7 +277,7 @@
         /* Section: Features */
         .features{ 
             padding: 120px 0; 
-            background: #363a3d url('/public/images//hero//istockphoto-1960246100-2048x2048.jpg') center/cover no-repeat;
+            background: #363a3d url('/images//hero//istockphoto-1960246100-2048x2048.jpg') center/cover no-repeat;
             background-attachment: fixed;
             position: relative;
             overflow: hidden;
@@ -900,7 +900,7 @@
         /* Section: FAQ */
         .faq{ 
             padding: 120px 0; 
-            background: #0A0F14 url('/public/images/istockphoto-2160077454-2048x2048.jpg') center/cover no-repeat;
+            background: #0A0F14 url('/images/istockphoto-2160077454-2048x2048.jpg') center/cover no-repeat;
             background-attachment: scroll;
             background-size: cover;
             position: relative;
@@ -1479,7 +1479,7 @@
         /* Section: Testimonials */
         .testimonials{ 
             padding: 120px 0; 
-            background: #c9d3d2 url('/public/images/istockphoto-503708258-2048x2048.jpg') center/cover no-repeat;
+            background: #c9d3d2 url('/images/istockphoto-503708258-2048x2048.jpg') center/cover no-repeat;
             position: relative;
             overflow: hidden;
         }
@@ -1637,7 +1637,7 @@
         /* Section: About Us */
         .about{ 
             padding: 120px 0; 
-            background: #0A0F14 url('/public/images/hero/istockphoto-1960246100-2048x2048.jpg') center/cover no-repeat;
+            background: #0A0F14 url('/images/hero/istockphoto-1960246100-2048x2048.jpg') center/cover no-repeat;
             background-attachment: fixed;
             position: relative;
             overflow: hidden;
