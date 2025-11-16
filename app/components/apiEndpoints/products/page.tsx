@@ -1,14 +1,23 @@
 // productEndpoints/productApi.ts
 import { tokenUtils, API_BASE_URL } from '../login/login';
 
-// Product Category Interfaces
-export interface productCategory {
-    id: number;
-    name: string
-    description: string;
-    imageUrl: string;
-    parentId: null | number;
+// Product Interfaces
+export interface product {
+    name: String;
+    productCategoryDTO: {
+        id: number;
+    },
+    description: String;
+    sizeOrVolume: String;
+    quantity: number;
+    unit: String;
+    startPrice: number;
+    endPrice: number;
+    status: String;
+    brandDTO: {
+        id: number;
     }
+}
 
 export interface ApiResponse<T = any> {
   payloadDto?: T;
@@ -41,42 +50,40 @@ const getAuthHeaders = () => {
 };
 
 // Lots API endpoints
-
-// Lots API endpoints
-export const productCategoriesApi = {
-  async getAllProductCategories(): Promise<ApiResponse<productCategory[]>> {
+export const productApi = {
+  async getAllProduct(): Promise<ApiResponse<product[]>> {
     try {
-      const response = await fetch(`${API_BASE_URL}/public/product-categories`, {
+      const response = await fetch(`${API_BASE_URL}/public/products`, {
         method: 'GET',
         headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
-        throw new Error(`Get product categories failedd: ${response.status} ${response.statusText}`);
+        throw new Error(`Get product failed: ${response.status} ${response.statusText}`);
       }
 
       return await response.json();
     } catch (error) {
-      console.error('Get product categories API call failed:', error);
+      console.error('Get product API call failed:', error);
       throw error;
     }
   },
 
-  // 🧩 GET /product-category/{id} (get product category by ID)
-  async getAllProductCategoriesById(id: number): Promise<ApiResponse<productCategory>> {
+  // 🧩 GET /product/{id} (get product by ID)
+  async getAllProductById(id: number): Promise<ApiResponse<product>> {
     try {
-      const response = await fetch(`${API_BASE_URL}/public/product-categories/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/public/${id}`, {
         method: 'GET',
         headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
-        throw new Error(`Get product categories failed: ${response.status} ${response.statusText}`);
+        throw new Error(`Get product failed: ${response.status} ${response.statusText}`);
       }
 
       return await response.json();
     } catch (error) {
-      console.error('Get product categories API call failed:', error);
+      console.error('Get product API call failed:', error);
       throw error;
     }
   },
