@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import StoreDashboard from '@/app/dashboards/storeDashboard/page';
 import FarmerDashboard from '@/app/dashboards/farmerDashboard/page';
 import Profile from '@/app/profile/page';
+import ProtectedRoute from '@/app/components/protectedRoute';
 
 export default function ProtectedProfileDashboard() {
   const router = useRouter();
@@ -37,9 +38,12 @@ export default function ProtectedProfileDashboard() {
 
   if (isChecking) {
     return (
+      <ProtectedRoute>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <div>Loading...</div>
       </div>
+</ProtectedRoute>
+
     );
   }
 

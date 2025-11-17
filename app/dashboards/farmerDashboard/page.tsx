@@ -70,9 +70,9 @@ const FarmerDashboard: React.FC<FarmerDashboardProps> = ({ children }) => {
     },
 
     {
-      key: '/reports',
+      key: '/products',
       icon: <BarChartOutlined />,
-      label: 'Generate Reports',
+      label: 'Products',
     },
   ];
 

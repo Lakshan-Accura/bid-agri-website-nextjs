@@ -2,85 +2,225 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import './products.css'
+import { productCategoriesApi } from '../components/apiEndpoints/productCategory/productCategory';
+import { message } from 'antd';
+import { productApi } from '../components/apiEndpoints/products/products';
+import { type Product } from '../components/apiEndpoints/products/products';
+import { type ProductCategory } from '../components/apiEndpoints/productCategory/productCategory';
+import ProtectedRoute from '../components/protectedRoute';
+import { tokenUtils } from '../components/apiEndpoints/login/login';
 
-// Types
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  subcategory: string;
-  image: string;
-  minPrice: number;
-  maxPrice: number;
-  unit?: string;
+// Local Storage Utilities with User-specific storage
+export interface LotItem {
+  product: Product;
+  quantity: number;
+  addedAt: string;
+  userId: string; // Add userId to track which user added the item
 }
 
-// Mock data
-const products: Product[] = [
-  {
-    id: '1',
-    name: 'Premium Grass Silage Bales (4x4)',
-    description: 'High-density 2024 second-cut grass silage with 28% dry matter and excellent lactic acid profile.',
-    category: 'Feed & Forage',
-    subcategory: 'Silage',
-    image: 'https://picsum.photos/seed/silage/600/400',
-    minPrice: 120,
-    maxPrice: 160
-  },
-  {
-    id: '2',
-    name: 'Wholecrop Barley (30% Moisture)',
-    description: 'Fresh chopped wholecrop barley ensiled and sheeted, ideal for high-energy dairy rations.',
-    category: 'Feed & Forage',
-    subcategory: 'Wholecrop',
-    image: 'https://picsum.photos/seed/barley/600/400',
-    minPrice: 210,
-    maxPrice: 250
-  },
-  {
-    id: '3',
-    name: 'Dairy Ration 18% Protein (Bulk)',
-    description: 'Soya-rich, high-energy blend formulated for early lactation cows, delivered in bulk blower loads.',
-    category: 'Feed & Nutrition',
-    subcategory: 'Dairy Feed',
-    image: 'https://picsum.photos/seed/ration/600/400',
-    minPrice: 365,
-    maxPrice: 395
-  },
-  {
-    id: '4',
-    name: 'Calf Starter Pellets (18% Protein)',
-    description: 'Palatable, molassed pellets with a full vitamin and mineral pack for calves from 10 days old.',
-    category: 'Youngstock',
-    subcategory: 'Calf Feed',
-    image: 'https://picsum.photos/seed/calfstarter/600/400',
-    minPrice: 12,
-    maxPrice: 15
-  },
-  {
-    id: '5',
-    name: 'Maize Silage Clamp (32% Starch)',
-    description: 'Precision-chopped Pioneer hybrid maize with uniform kernel processing for maximum feed efficiency.',
-    category: 'Feed & Forage',
-    subcategory: 'Silage',
-    image: 'https://picsum.photos/seed/maize/600/400',
-    minPrice: 180,
-    maxPrice: 220
-  },
-  {
-    id: '6',
-    name: 'Beet Pulp Nuts (Moist)',
-    description: 'Moist beet pulp with added molasses, perfect for maintaining rumen health and butterfat levels.',
-    category: 'Feed & Nutrition',
-    subcategory: 'Energy Feeds',
-    image: 'https://picsum.photos/seed/beetpulp/600/400',
-    minPrice: 195,
-    maxPrice: 225
-  }
-];
+export interface UserLot {
+  userId: string;
+  items: LotItem[];
+  createdAt: string;
+  updatedAt: string;
+}
 
-// Header Component
+export const lotStorage = {
+  // Get storage key for current user
+  getStorageKey(): string {
+    const decodedToken = tokenUtils.getDecodedToken();
+    const userId = decodedToken?.sub; // Using 'sub' claim from JWT as user ID
+    return userId ? `bidagri-lot-${userId}` : 'bidagri-lot-anonymous';
+  },
+
+  // Get current user ID from token
+  getCurrentUserId(): string | null {
+    const decodedToken = tokenUtils.getDecodedToken();
+    return decodedToken?.sub || null; // Using 'sub' claim as user ID
+  },
+
+  // Get all items from lot for current user
+  getLotItems(): LotItem[] {
+    if (typeof window === 'undefined') return [];
+    try {
+      const storageKey = this.getStorageKey();
+      const items = localStorage.getItem(storageKey);
+      return items ? JSON.parse(items) : [];
+    } catch (error) {
+      console.error('Error reading lot from localStorage:', error);
+      return [];
+    }
+  },
+
+  // Add product to lot for current user
+  addToLot(product: Product): LotItem[] {
+    const userId = this.getCurrentUserId();
+    if (!userId) {
+      message.error('Please login to add products to your lot');
+      return [];
+    }
+
+    const items = this.getLotItems();
+    const existingItemIndex = items.findIndex(item => 
+      item.product.id === product.id && item.userId === userId
+    );
+
+    if (existingItemIndex >= 0) {
+      // Update quantity if product already exists for this user
+      items[existingItemIndex].quantity += 1;
+      items[existingItemIndex].addedAt = new Date().toISOString();
+    } else {
+      // Add new item with user ID
+      items.push({
+        product,
+        quantity: 1,
+        addedAt: new Date().toISOString(),
+        userId: userId
+      });
+    }
+
+    const storageKey = this.getStorageKey();
+    localStorage.setItem(storageKey, JSON.stringify(items));
+    return items;
+  },
+
+  // Remove product from lot for current user
+  removeFromLot(productId: number): LotItem[] {
+    const userId = this.getCurrentUserId();
+    const items = this.getLotItems();
+    const filteredItems = items.filter(item => 
+      !(item.product.id === productId && item.userId === userId)
+    );
+    
+    const storageKey = this.getStorageKey();
+    localStorage.setItem(storageKey, JSON.stringify(filteredItems));
+    return filteredItems;
+  },
+
+  // Update product quantity in lot for current user
+  updateQuantity(productId: number, quantity: number): LotItem[] {
+    const userId = this.getCurrentUserId();
+    const items = this.getLotItems();
+    const itemIndex = items.findIndex(item => 
+      item.product.id === productId && item.userId === userId
+    );
+    
+    if (itemIndex >= 0) {
+      if (quantity <= 0) {
+        return this.removeFromLot(productId);
+      } else {
+        items[itemIndex].quantity = quantity;
+        items[itemIndex].addedAt = new Date().toISOString();
+        const storageKey = this.getStorageKey();
+        localStorage.setItem(storageKey, JSON.stringify(items));
+      }
+    }
+    
+    return items;
+  },
+
+  // Clear entire lot for current user
+  clearLot(): void {
+    const storageKey = this.getStorageKey();
+    localStorage.removeItem(storageKey);
+  },
+
+  // Clear lot for all users (admin function)
+  clearAllLots(): void {
+    const keys = Object.keys(localStorage);
+    keys.forEach(key => {
+      if (key.startsWith('bidagri-lot-')) {
+        localStorage.removeItem(key);
+      }
+    });
+    // Also clear anonymous lot
+    localStorage.removeItem('bidagri-lot-anonymous');
+  },
+
+  // Get lot count (total items) for current user
+  getLotCount(): number {
+    const items = this.getLotItems();
+    return items.reduce((total, item) => total + item.quantity, 0);
+  },
+
+  // Get total value of lot for current user
+  getLotTotal(): number {
+    const items = this.getLotItems();
+    return items.reduce((total, item) => total + (item.product.startPrice * item.quantity), 0);
+  },
+
+  // Get all lots for all users (admin function)
+  getAllUserLots(): UserLot[] {
+    if (typeof window === 'undefined') return [];
+    
+    const userLots: UserLot[] = [];
+    const keys = Object.keys(localStorage);
+    
+    keys.forEach(key => {
+      if (key.startsWith('bidagri-lot-')) {
+        try {
+          const items: LotItem[] = JSON.parse(localStorage.getItem(key) || '[]');
+          if (items.length > 0) {
+            const userId = key === 'bidagri-lot-anonymous' ? 'anonymous' : key.replace('bidagri-lot-', '');
+            userLots.push({
+              userId,
+              items,
+              createdAt: items[0]?.addedAt || new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+            });
+          }
+        } catch (error) {
+          console.error(`Error parsing lot for key ${key}:`, error);
+        }
+      }
+    });
+    
+    return userLots;
+  },
+
+  // Migrate anonymous lot to user lot (when user logs in)
+  migrateAnonymousToUser(userId: string): void {
+    const anonymousItems: LotItem[] = JSON.parse(localStorage.getItem('bidagri-lot-anonymous') || '[]');
+    
+    if (anonymousItems.length > 0) {
+      const userItems = this.getLotItems();
+      
+      // Merge anonymous items with user items
+      anonymousItems.forEach(anonymousItem => {
+        const existingIndex = userItems.findIndex(userItem => 
+          userItem.product.id === anonymousItem.product.id
+        );
+        
+        if (existingIndex >= 0) {
+          // Merge quantities
+          userItems[existingIndex].quantity += anonymousItem.quantity;
+        } else {
+          // Add new item with user ID
+          userItems.push({
+            ...anonymousItem,
+            userId: userId
+          });
+        }
+      });
+      
+      // Save merged items to user's lot
+      const userStorageKey = `bidagri-lot-${userId}`;
+      localStorage.setItem(userStorageKey, JSON.stringify(userItems));
+      
+      // Clear anonymous lot
+      localStorage.removeItem('bidagri-lot-anonymous');
+      
+      message.success('Your cart items have been saved to your account');
+    }
+  },
+
+  // Check if user is logged in
+  isUserLoggedIn(): boolean {
+    return tokenUtils.isTokenValid();
+  }
+};
+
+// Header Component (unchanged)
 function Header({ lotCount, onHelpClick }: { lotCount: number; onHelpClick: () => void }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -120,14 +260,14 @@ function Header({ lotCount, onHelpClick }: { lotCount: number; onHelpClick: () =
           />
           <a href="/#contact" className="cta">Auction</a>
           
-          {/* Lot Indicator */}
-          <button className="lot-indicator" aria-label="View lot">
+          {/* Lot Indicator - Now clickable and goes to lot page */}
+          <a href="/lot" className="lot-indicator" aria-label="View lot" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
             <svg className="lot-indicator-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M4 7h16l-1.5 12h-13L4 7Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M9 7V5a3 3 0 0 1 6 0v2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <span className="lot-indicator-count">{lotCount}</span>
-          </button>
+          </a>
 
           {/* Help Button */}
           <button 
@@ -139,55 +279,93 @@ function Header({ lotCount, onHelpClick }: { lotCount: number; onHelpClick: () =
           </button>
         </nav>
       </div>
-
-      <style jsx>{`
-       
-      `}</style>
     </header>
   );
 }
 
-// Product Card Component
-function ProductCard({ product, onAddToLot }: { product: Product; onAddToLot: (product: Product) => void }) {
+// Product Card Component (unchanged)
+function ProductCard({ product, onAddToLot, categories }: { 
+  product: Product; 
+  onAddToLot: (product: Product) => void;
+  categories: ProductCategory[];
+}) {
+  const [isAdding, setIsAdding] = useState(false);
+
+  const handleAddToLot = async () => {
+    setIsAdding(true);
+    await onAddToLot(product);
+    setIsAdding(false);
+  };
+
+  // Find the category and parent category for this product
+  const productCategory = categories.find(cat => cat.id === product.productCategoryDTO.id);
+  const parentCategory = productCategory?.parentId 
+    ? categories.find(cat => cat.id === productCategory.parentId)
+    : productCategory;
+
   return (
-    <article className="product-card" data-category={product.category} data-subcategory={product.subcategory}>
-      <img src={product.image} alt={product.name} className="product-image" />
+    <article 
+      className="product-card" 
+      data-category={parentCategory?.name || 'Uncategorized'} 
+      data-subcategory={productCategory?.name || 'Uncategorized'}
+    >
+      <div className="product-image-placeholder">
+        {productCategory?.imageUrl ? (
+          <img src={productCategory.imageUrl} alt={product.name} className="product-image" />
+        ) : (
+          <div className="product-image-fallback">
+            {product.name.charAt(0)}
+          </div>
+        )}
+      </div>
       <div className="product-info">
         <h3>{product.name}</h3>
         <p className="product-description">{product.description}</p>
         
+        {/* Category badges */}
+        <div className="product-categories">
+          {parentCategory && (
+            <span className="category-badge main-category">{parentCategory.name}</span>
+          )}
+          {productCategory && productCategory.parentId && (
+            <span className="category-badge subcategory">{productCategory.name}</span>
+          )}
+        </div>
+        
         <div className="product-pricing">
           <div className="product-price-block">
-            <span className="price-label">Min Price</span>
-            <span className="price-value">€{product.minPrice}</span>
+            <span className="price-label">Start Price</span>
+            <span className="price-value">€{product.startPrice}</span>
           </div>
           <div className="product-price-block">
-            <span className="price-label">Max Price</span>
-            <span className="price-value">€{product.maxPrice}</span>
+            <span className="price-label">End Price</span>
+            <span className="price-value">€{product.endPrice}</span>
           </div>
+        </div>
+        
+        <div className="product-details">
+          <span className="product-size">{product.sizeOrVolume}</span>
+          <span className="product-quantity">{product.quantity} {product.unit}</span>
         </div>
         
         <div className="product-actions">
           <button 
-            className="product-btn primary add-to-lot-btn"
-            onClick={() => onAddToLot(product)}
+            className={`product-btn primary add-to-lot-btn ${isAdding ? 'loading' : ''}`}
+            onClick={handleAddToLot}
+            disabled={isAdding}
           >
-            Add to Lot
+            {isAdding ? 'Adding...' : 'Add to Lot'}
           </button>
           <button className="product-btn secondary">
             Details
           </button>
         </div>
       </div>
-
-      <style jsx>{`
-        
-      `}</style>
     </article>
   );
 }
 
-// Modal Components
+// Modal Components (unchanged)
 function LoginModal({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose: () => void; onSubmit: (data: any) => void }) {
   const [formData, setFormData] = useState({ email: '', password: '' });
 
@@ -244,10 +422,6 @@ function LoginModal({ isOpen, onClose, onSubmit }: { isOpen: boolean; onClose: (
           <p>Not registered yet? <a href="#">Create an account</a></p>
         </div>
       </div>
-
-      <style jsx>{`
-      
-      `}</style>
     </div>
   );
 }
@@ -291,15 +465,11 @@ function HelpModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
           Need more details? <a href="#">Contact +1 000 000 000 for support</a>
         </div>
       </div>
-
-      <style jsx>{`
-       
-      `}</style>
     </div>
   );
 }
 
-// Footer Component
+// Footer Component (unchanged)
 function Footer() {
   return (
     <footer>
@@ -353,33 +523,62 @@ function Footer() {
           <p>© 2025 BidAgri. All rights reserved. | Registered in Ireland | VAT: IE123456789</p>
         </div>
       </div>
-
-      <style jsx>{`
-       
-      `}</style>
     </footer>
   );
 }
 
 // Main Products Page Component
-export default function ProductsPage() {
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
+function ProductsPageContent() {
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedSubcategory, setSelectedSubcategory] = useState('all');
+  const [products, setProducts] = useState<Product[]>([]);
   const [lotCount, setLotCount] = useState(0);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
 
-  // Extract categories and subcategories
-  const categories = Array.from(new Set(products.map(p => p.category)));
-  const subcategories = Array.from(new Set(
-    products
-      .filter(p => selectedCategory === 'all' || p.category === selectedCategory)
-      .map(p => p.subcategory)
-  ));
+  // Initialize lot count from localStorage
+  useEffect(() => {
+    setLotCount(lotStorage.getLotCount());
+    
+    // Listen for lot updates from other components
+    const handleLotUpdate = () => {
+      setLotCount(lotStorage.getLotCount());
+    };
 
-  // Filter products
+    window.addEventListener('lotUpdated', handleLotUpdate);
+    return () => window.removeEventListener('lotUpdated', handleLotUpdate);
+  }, []);
+
+  // Extract main categories and subcategories based on your rule
+  const mainCategories = categories.filter(cat => cat.id === cat.parentId);
+  const subcategories = categories.filter(cat => 
+    cat.id !== cat.parentId &&
+    (selectedCategory === 'all' || cat.parentId?.toString() === selectedCategory)
+  );
+
+  const fetchProducts = async () => {
+    try {
+      const response = await productApi.getAllProduct();
+      if (response.payloadDto) {
+        setProducts(response.payloadDto);
+        setFilteredProducts(response.payloadDto);
+      } else {
+        message.error("Failed to load products");
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      message.error("Error loading products");
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  // Filter products based on search and category filters
   useEffect(() => {
     let filtered = products;
 
@@ -391,18 +590,55 @@ export default function ProductsPage() {
     }
 
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(product => product.category === selectedCategory);
+      filtered = filtered.filter(product => {
+        const productCategory = categories.find(cat => cat.id === product.productCategoryDTO.id);
+        const parentCategoryId = productCategory?.parentId || productCategory?.id;
+        return parentCategoryId?.toString() === selectedCategory;
+      });
     }
 
     if (selectedSubcategory !== 'all') {
-      filtered = filtered.filter(product => product.subcategory === selectedSubcategory);
+      filtered = filtered.filter(product => {
+        const productCategory = categories.find(cat => cat.id === product.productCategoryDTO.id);
+        return productCategory?.id.toString() === selectedSubcategory;
+      });
     }
 
     setFilteredProducts(filtered);
-  }, [searchQuery, selectedCategory, selectedSubcategory]);
+  }, [searchQuery, selectedCategory, selectedSubcategory, categories, products]);
+
+  // Fetch categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await productCategoriesApi.getAllProductCategories();
+        setCategories(response.payloadDto || []);
+      } catch (error) {
+        console.error('Failed to fetch categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleAddToLot = (product: Product) => {
-    setLotCount(prev => prev + 1);
+    try {
+      // Add to localStorage with user ID
+      lotStorage.addToLot(product);
+      
+      // Update count
+      const newCount = lotStorage.getLotCount();
+      setLotCount(newCount);
+      
+      // Show success message
+      message.success(`${product.name} added to lot!`);
+      
+      // Trigger event for other components to listen to
+      window.dispatchEvent(new Event('lotUpdated'));
+    } catch (error) {
+      console.error('Error adding to lot:', error);
+      message.error('Failed to add product to lot');
+    }
   };
 
   return (
@@ -435,8 +671,10 @@ export default function ProductsPage() {
                   }}
                 >
                   <option value="all">All categories</option>
-                  {categories.map(category => (
-                    <option key={category} value={category}>{category}</option>
+                  {mainCategories.map(category => (
+                    <option key={category.id} value={category.id.toString()}>
+                      {category.name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -451,7 +689,9 @@ export default function ProductsPage() {
                 >
                   <option value="all">All subcategories</option>
                   {subcategories.map(subcategory => (
-                    <option key={subcategory} value={subcategory}>{subcategory}</option>
+                    <option key={subcategory.id} value={subcategory.id.toString()}>
+                      {subcategory.name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -476,6 +716,7 @@ export default function ProductsPage() {
                   key={product.id} 
                   product={product} 
                   onAddToLot={handleAddToLot}
+                  categories={categories}
                 />
               ))}
             </div>
@@ -505,10 +746,15 @@ export default function ProductsPage() {
         isOpen={isHelpModalOpen}
         onClose={() => setIsHelpModalOpen(false)}
       />
-
-      <style jsx global>{`
-        
-      `}</style>
     </div>
+  );
+}
+
+// Export the wrapped component
+export default function ProductsPage() {
+  return (
+    <ProtectedRoute requiredRoles="SYSTEM_USER">
+      <ProductsPageContent />
+    </ProtectedRoute>
   );
 }

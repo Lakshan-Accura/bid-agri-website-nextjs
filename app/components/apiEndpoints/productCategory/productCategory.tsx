@@ -2,7 +2,7 @@
 import { tokenUtils, API_BASE_URL } from '../login/login';
 
 // Product Category Interfaces
-export interface productCategory {
+export interface ProductCategory {
     id: number;
     name: string
     description: string;
@@ -44,7 +44,7 @@ const getAuthHeaders = () => {
 
 // Lots API endpoints
 export const productCategoriesApi = {
-  async getAllProductCategories(): Promise<ApiResponse<productCategory[]>> {
+  async getAllProductCategories(): Promise<ApiResponse<ProductCategory[]>> {
     try {
       const response = await fetch(`${API_BASE_URL}/public/product-categories`, {
         method: 'GET',
@@ -52,7 +52,7 @@ export const productCategoriesApi = {
       });
 
       if (!response.ok) {
-        throw new Error(`Get product categories failedd: ${response.status} ${response.statusText}`);
+        throw new Error(`Get product categories failed: ${response.status} ${response.statusText}`);
       }
 
       return await response.json();
@@ -63,7 +63,7 @@ export const productCategoriesApi = {
   },
 
   // 🧩 GET /product-category/{id} (get product category by ID)
-  async getAllProductCategoriesById(id: number): Promise<ApiResponse<productCategory>> {
+  async getAllProductCategoriesById(id: number): Promise<ApiResponse<ProductCategory>> {
     try {
       const response = await fetch(`${API_BASE_URL}/public/product-categories/${id}`, {
         method: 'GET',

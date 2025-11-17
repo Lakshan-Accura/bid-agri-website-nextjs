@@ -7,6 +7,7 @@ import { passwordApi, tokenUtils } from '../../components/apiEndpoints/login/log
 import type { ChangePasswordRequest } from '../../components/apiEndpoints/login/login';
 import { useRouter } from 'next/navigation';
 import MainLayout from '../../components/mainLayout/page';
+import ProtectedRoute from '@/app/components/protectedRoute';
 
 const ChangePasswordInit: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -127,6 +128,7 @@ const ChangePasswordInit: React.FC = () => {
   };
 
   return (
+    <ProtectedRoute>
     <MainLayout>
       <div style={{ 
         display: 'flex', 
@@ -262,6 +264,7 @@ const ChangePasswordInit: React.FC = () => {
         </Card>
       </div>
     </MainLayout>
+    </ProtectedRoute>
   );
 };
 

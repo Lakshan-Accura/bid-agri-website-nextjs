@@ -2,18 +2,19 @@
 import { tokenUtils, API_BASE_URL } from '../login/login';
 
 // Product Interfaces
-export interface product {
-    name: String;
+export interface Product {
+    id: number;
+    name: string;
     productCategoryDTO: {
         id: number;
     },
-    description: String;
-    sizeOrVolume: String;
+    description: string;
+    sizeOrVolume: string;
     quantity: number;
-    unit: String;
+    unit: string;
     startPrice: number;
     endPrice: number;
-    status: String;
+    status: string;
     brandDTO: {
         id: number;
     }
@@ -51,7 +52,7 @@ const getAuthHeaders = () => {
 
 // Lots API endpoints
 export const productApi = {
-  async getAllProduct(): Promise<ApiResponse<product[]>> {
+  async getAllProduct(): Promise<ApiResponse<Product[]>> {
     try {
       const response = await fetch(`${API_BASE_URL}/public/products`, {
         method: 'GET',
@@ -70,7 +71,7 @@ export const productApi = {
   },
 
   // 🧩 GET /product/{id} (get product by ID)
-  async getAllProductById(id: number): Promise<ApiResponse<product>> {
+  async getAllProductById(id: number): Promise<ApiResponse<Product>> {
     try {
       const response = await fetch(`${API_BASE_URL}/public/${id}`, {
         method: 'GET',

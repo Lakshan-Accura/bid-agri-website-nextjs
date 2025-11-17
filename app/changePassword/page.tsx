@@ -6,6 +6,7 @@ import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { passwordApi, tokenUtils } from '../components/apiEndpoints/login/login';
 import type { ChangePasswordRequest } from '../components/apiEndpoints/login/login';
 import { useRouter } from 'next/navigation';
+import ProtectedRoute from '../components/protectedRoute';
 
 interface ChangePasswordProps {
   userEmail: string;
@@ -87,6 +88,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ userEmail, onSuccess })
   };
 
   return (
+    <ProtectedRoute>
     <div style={{ padding: '10px 0' }}>
       <Form
         form={form}
@@ -190,6 +192,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = ({ userEmail, onSuccess })
         style={{ marginTop: '16px' }}
       />
     </div>
+    </ProtectedRoute>
   );
 };
 

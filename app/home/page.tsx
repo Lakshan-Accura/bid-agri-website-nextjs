@@ -4,7 +4,7 @@ import { Button, message, Space } from 'antd'
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react'
 import './home.css'
-import { productCategoriesApi, type productCategory } from '../components/apiEndpoints/productCategory/productCategory';
+import { productCategoriesApi, type ProductCategory } from '../components/apiEndpoints/productCategory/productCategory';
 
 import { 
   ShopOutlined, 
@@ -21,8 +21,8 @@ export default function Home() {
   const catGridRef = useRef<HTMLDivElement | null>(null);
   const stepsScrollRef = useRef<HTMLDivElement | null>(null)
   const [loading, setLoading] = useState<boolean>(true);
-  const [productCategories, setProductCategories] = useState<productCategory[]>([]);
-  const [allCategories, setAllCategories] = useState<productCategory[]>([]);
+  const [productCategories, setProductCategories] = useState<ProductCategory[]>([]);
+  const [allCategories, setAllCategories] = useState<ProductCategory[]>([]);
 
   useEffect(() => {
     // Small delay to ensure page is fully loaded

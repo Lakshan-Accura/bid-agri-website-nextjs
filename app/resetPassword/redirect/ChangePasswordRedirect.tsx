@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import ProtectedRoute from '@/app/components/protectedRoute';
 
 const ChangePasswordRedirect: React.FC = () => {
   const router = useRouter();
@@ -25,6 +26,7 @@ const ChangePasswordRedirect: React.FC = () => {
   }, [searchParams, router]);
 
   return (
+    <ProtectedRoute>
     <div
       style={{
         display: 'flex',
@@ -35,6 +37,7 @@ const ChangePasswordRedirect: React.FC = () => {
     >
       Redirecting...
     </div>
+    </ProtectedRoute>
   );
 };
 

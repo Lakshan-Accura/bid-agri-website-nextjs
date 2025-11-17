@@ -15,6 +15,7 @@ import {
 } from "@ant-design/icons";
 import ChangePassword from "../changePassword/page";
 import { tokenUtils } from "../components/apiEndpoints/login/login";
+import ProtectedRoute from "../components/protectedRoute";
 
 interface UserProfile {
   email: string;
@@ -98,6 +99,7 @@ const Profile: React.FC = () => {
   }
 
   return (
+    <ProtectedRoute>
     <div className="profile-container">
       <Card
         className="profile-card"
@@ -167,6 +169,7 @@ const Profile: React.FC = () => {
         />
       </Modal>
     </div>
+    </ProtectedRoute>
   );
 };
 
