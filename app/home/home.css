@@ -2540,3 +2540,18 @@
             .hero-content, .section { page-break-inside: avoid; }
         }
  
+
+         .logout{ 
+            padding: 12px 20px; 
+            border-radius: 50px; 
+            background: #06ac06; 
+            color: #fff; 
+            font-weight: 800; 
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .logout:hover{
+            background: #e55a2b;
+            transform: translateY(-2px);
+        }
