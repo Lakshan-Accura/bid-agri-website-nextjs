@@ -17,6 +17,7 @@ export interface Product {
     status: string;
     brandDTO: {
         id: number;
+        name: string;
     }
 }
 

@@ -6,68 +6,13 @@ import { Product } from '../components/apiEndpoints/products/products';
 import './lot.css';
 import {lotsApi} from '../components/apiEndpoints/lot/lot'
 import ProtectedRoute from '../components/protectedRoute';
+import { lotStorage } from '../utils/lotStorage';
 
 export interface LotItem {
   product: Product;
   quantity: number;
   addedAt: string;
 }
-
-export const lotStorage = {
-  // Get all items from lot
-  getLotItems(): LotItem[] {
-    if (typeof window === 'undefined') return [];
-    try {
-      const items = localStorage.getItem('bidagri-lot');
-      return items ? JSON.parse(items) : [];
-    } catch (error) {
-      console.error('Error reading lot from localStorage:', error);
-      return [];
-    }
-  },
-
-  // Remove product from lot
-  removeFromLot(productId: number): LotItem[] {
-    const items = this.getLotItems();
-    const filteredItems = items.filter(item => item.product.id !== productId);
-    localStorage.setItem('bidagri-lot', JSON.stringify(filteredItems));
-    return filteredItems;
-  },
-
-  // Update product quantity in lot
-  updateQuantity(productId: number, quantity: number): LotItem[] {
-    const items = this.getLotItems();
-    const itemIndex = items.findIndex(item => item.product.id === productId);
-    
-    if (itemIndex >= 0) {
-      if (quantity <= 0) {
-        return this.removeFromLot(productId);
-      } else {
-        items[itemIndex].quantity = quantity;
-        localStorage.setItem('bidagri-lot', JSON.stringify(items));
-      }
-    }
-    
-    return items;
-  },
-
-  // Clear entire lot
-  clearLot(): void {
-    localStorage.removeItem('bidagri-lot');
-  },
-
-  // Get lot count (total items)
-  getLotCount(): number {
-    const items = this.getLotItems();
-    return items.reduce((total, item) => total + item.quantity, 0);
-  },
-
-  // Get total value of lot
-  getLotTotal(): number {
-    const items = this.getLotItems();
-    return items.reduce((total, item) => total + (item.product.startPrice * item.quantity), 0);
-  }
-};
 
   // Save lot
   const handleSave = async () => {
@@ -236,17 +181,6 @@ export default function LotPage() {
     window.dispatchEvent(new Event('lotUpdated'));
   };
 
-  const clearLot = () => {
-    lotStorage.clearLot();
-    setLotItems([]);
-    message.success('Lot cleared');
-    window.dispatchEvent(new Event('lotUpdated'));
-  };
-
-  const getTotalPrice = () => {
-    return lotItems.reduce((total, item) => total + (item.product.startPrice * item.quantity), 0);
-  };
-
   if (isLoading) {
     return (
       <div className="lot-page">
@@ -261,12 +195,12 @@ export default function LotPage() {
     <div className="lot-page">
       <Header lotCount={lotStorage.getLotCount()} />
       
-      <main className="lot-main">
+       <main className="create-lot-main">
         <div className="container">
-          <section className="lot-header">
-            <h1>Your Product Lot</h1>
-            <p>Review and manage the products you've selected for your auction</p>
-          </section>
+            <div className="create-lot-header">
+                <h1>Create Your Lot</h1>
+                <p>Review and manage the products you've selected for your auction lot. Adjust quantities as needed before finalizing.</p>
+            </div>
 
           {lotItems.length === 0 ? (
             <div className="lot-empty">
@@ -276,46 +210,40 @@ export default function LotPage() {
             </div>
           ) : (
             <>
-              <div className="lot-summary">
-                <div className="summary-item">
-                  <span className="summary-label">Total Items:</span>
-                  <span className="summary-value">{lotStorage.getLotCount()}</span>
-                </div>
-                <div className="summary-item">
-                  <span className="summary-label">Total Value:</span>
-                  <span className="summary-value">€{getTotalPrice().toFixed(2)}</span>
-                </div>
-                <div className="summary-item">
-                  <span className="summary-label">Products:</span>
-                  <span className="summary-value">{lotItems.length}</span>
-                </div>
-                <button onClick={clearLot} className="btn secondary clear-lot-btn">
-                  Clear Lot
-                </button>
-              </div>
-
-              <div className="lot-items">
+              <div className="lot-products-list">
                 {lotItems.map((item) => (
-                  <div key={item.product.id} className="lot-item">
-                    <div className="item-image">
+                  
+                  <div key={item.product.id} className="lot-product-item">
+                    <div className="lot-product-image">
                       <div className="image-placeholder">
                         {item.product.name.charAt(0)}
                       </div>
                     </div>
                     
-                    <div className="item-details">
-                      <h3>{item.product.name}</h3>
-                      <p className="item-description">{item.product.description}</p>
-                      <div className="item-meta">
-                        <span>Size: {item.product.sizeOrVolume}</span>
-                        <span>Unit: {item.product.unit}</span>
-                        <span>Price: €{item.product.startPrice}</span>
+                    <div className="lot-product-info">
+                        <h3 className="lot-product-title">{item.product.name}</h3>
+                      <p className="lot-product-description">{item.product.description}</p>
+                      <div className="lot-item-meta">
+                         <div className="lot-product-brand">
+                                <span className="meta-label">Brand: </span>
+                                <span className="meta-value">{item.product.brandDTO.name}</span>
+                            </div>
+                         <div className="lot-product-pricing">
+                                <span className="price-label">Min Price: </span>
+                                <span className="price-value">&euro;{item.product.endPrice}</span>
+                                <span className="price-label">Max Price: </span>
+                                <span className="price-value">&euro;{item.product.startPrice}</span>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="item-quantity">
+                    {/* <div className="lot-product-controls">
                       <label>Quantity:</label>
                       <div className="quantity-controls">
+
+                        <div className="lot-product-qty">
+                        <label>Quantity:</label>
+                        </div>
                         <button 
                           onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
                           disabled={item.quantity <= 1}
@@ -329,31 +257,33 @@ export default function LotPage() {
                           +
                         </button>
                       </div>
+                    </div> */}
+
+                      <div className="lot-product-controls">
+                        <div className="lot-product-qty">
+                            <label htmlFor="qty1">Qty</label>
+                            <input type="number" id="qty1" name="qty" value="1" min="1" className="qty-input"/>
+                        </div>
+                        <button className="lot-remove-btn" type="button" aria-label="Remove product">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 6L6 18M6 6l12 12"/>
+                            </svg>
+                            Remove
+                        </button>
                     </div>
 
-                    <div className="item-total">
-                      €{(item.product.startPrice * item.quantity).toFixed(2)}
-                    </div>
-
-                    <div className="item-actions">
-                      <button 
-                        onClick={() => removeFromLot(item.product.id)}
-                        className="btn remove-btn"
-                      >
-                        Remove
-                      </button>
-                    </div>
                   </div>
                 ))}
               </div>
 
               <div className="lot-actions">
-                <button onClick={handleSave} className="btn primary large">
-                  Proceed to Auction
-                </button>
-                <a href="/products" className="btn secondary">
-                  Continue Shopping
+                 <a href="/products" className="product-btn secondary">
+                 Continue Shopping
                 </a>
+                <button onClick={handleSave} className="product-btn primary">
+                   Create Lot 
+                </button>
+               
               </div>
             </>
           )}

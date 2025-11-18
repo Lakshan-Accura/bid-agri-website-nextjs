@@ -279,61 +279,100 @@
   transform: translateY(-1px);
 }
 
-.lot-actions {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  padding: 2.5rem;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 24px;
-  box-shadow: 0 18px 35px rgba(0,0,0,0.35);
-  backdrop-filter: blur(6px);
-}
 
-.btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 0.95rem;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.04);
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
+.product-btn{
+            flex: 1;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.04);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
 
-.btn.primary {
-  background: #75bf42;
-  color: #0a0f14;
-  border-color: transparent;
-}
+        .product-btn.primary{
+            background: var(--green);
+            color: #0a0f14;
+            border-color: transparent;
+            
 
-.btn.primary:hover {
-  background: #69ad3b;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(117,191,66,0.3);
-}
+        }
 
-.btn.secondary {
-  background: rgba(255,255,255,0.08);
-  color: #fff;
-}
+        .product-btn.primary:hover{
+            background: #69ad3b;
+        }
 
-.btn.secondary:hover {
-  background: rgba(255,255,255,0.12);
-  border-color: rgba(255,255,255,0.2);
-  transform: translateY(-2px);
-}
+        .product-btn.secondary:hover{
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.2);
+        }
 
-.btn.large {
-  padding: 1rem 2rem;
-  font-size: 0.95rem;
-}
+        .product-btn.secondary,
+        a.product-btn.secondary{
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+          .product-btn{
+        width: 100%;
+    }
+
+
+    h1{ font-size:clamp(2.6rem, 5vw, 4.1rem); line-height:1.05; letter-spacing:-.02em; margin-top:0; }
+        .btn{ padding:18px 28px; border-radius:50px; border:1px solid var(--border); background:rgba(255,255,255,.04); color:#eaf0f6; font-weight:700; font-size: 1.1rem; }
+        .btn.primary{ 
+            background:var(--green); 
+            color:#101216; 
+            border:none; 
+            position: relative;
+            overflow: visible;
+        }
+        .btn.primary::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50px;
+            padding: 3px;
+            background: linear-gradient(90deg, transparent, #fff 50%, transparent);
+            background-size: 200% 100%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: borderMove 2s linear infinite;
+            z-index: -1;
+        }
+        .btn.primary:hover{ background:var(--green-dark); color:#fff; }
+
+    .btn-outline{
+            padding: 14px 32px;
+            border: 2px solid var(--green);
+            background: transparent;
+            color: var(--green);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .btn-outline:hover{
+            background: var(--green);
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(117,191,66,0.3);
+        }
+
+  .btn { padding: 14px 24px; font-size: 1rem; }
+            .btn-outline { padding: 13px 23px; }
+
+
+
 
 /* Header Styles */
 .header {
@@ -601,10 +640,7 @@ footer::before {
     gap: 1rem;
   }
   
-  .lot-actions {
-    flex-direction: column;
-    gap: 1rem;
-  }
+
   
   .lot-summary {
     grid-template-columns: 1fr;
@@ -676,3 +712,162 @@ footer::before {
             background: #e55a2b;
             transform: translateY(-2px);
         }
+
+        .meta-label{
+    color: rgba(255,255,255,0.6);
+}
+
+.meta-value{
+    color: var(--green);
+    font-weight: 600;
+}
+
+.lot-product-pricing .price-label{
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.lot-product-pricing .price-value{
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--green);
+    margin-right: 8px;
+}
+
+  .lot-product-pricing{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+  }
+
+  .lot-product-controls{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.lot-product-qty{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+}
+
+.qty-input{
+    width: 80px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(12,17,23,0.8);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.qty-input:focus{
+    outline: none;
+    border-color: rgba(117,191,66,0.6);
+    box-shadow: 0 0 0 3px rgba(117,191,66,0.15);
+}
+
+.lot-remove-btn{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+    color: #ff6b6b;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.lot-remove-btn:hover{
+    background: rgba(255,107,107,0.1);
+    border-color: rgba(255,107,107,0.3);
+    color: #ff5252;
+}
+
+.lot-remove-btn svg{
+    stroke: currentColor;
+}
+
+.lot-actions{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 50 10px;
+}
+
+.lot-actions .product-btn{
+    min-width: 200px;
+    padding: 16px 32px;
+    font-size: 1rem;
+    width: 100%;  
+    align-items: center;
+    text-align: center;
+}
+
+
+    .create-lot-main{
+    padding: 160px 0 80px;
+}
+
+@media (max-width: 1024px){
+    .create-lot-main{
+        padding-top: 150px;
+    }
+  }
+    @media (max-width: 768px){
+    .create-lot-main{
+        padding-top: 140px;
+    }
+  }
+
+  @media (max-width: 540px){
+    .create-lot-main{
+        padding-top: 130px;
+    }
+  }
+
+  .container{ max-width:1260px; margin:0 auto; padding:0 0px; }
+
+    @media (max-width: 1024px) {
+            .container { padding: 0 20px; }
+    }
+
+    .container { padding: 0 15px; }
+
+
+    .create-lot-header{
+    text-align: center;
+    margin-bottom: 48px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 10px;
+}
+
+.create-lot-header h1{
+    font-size: clamp(2.4rem, 5vw, 3.4rem);
+    margin-bottom: 16px;
+    color: #fff;
+}
+
+.create-lot-header p{
+    color: #c8d2e0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
