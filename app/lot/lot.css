@@ -131,25 +131,25 @@
   margin-top: 1rem;
 }
 
-.lot-items {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 3rem;
+.lot-products-list{
+    max-width: 1000px;
+    margin: 0 auto 48px;
+    padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .lot-item {
-  display: grid;
-  grid-template-columns: 80px 1fr auto auto auto;
-  gap: 1.5rem;
-  align-items: center;
-  padding: 2rem;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 24px;
-  box-shadow: 0 18px 35px rgba(0,0,0,0.35);
-  backdrop-filter: blur(6px);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+ display: grid;
+    grid-template-columns: 140px 1fr auto;
+    gap: 24px;
+    padding: 24px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    transition: all 0.2s ease;
 }
 
 .lot-item:hover {
@@ -699,21 +699,21 @@ footer::before {
 }
 
 .logout{ 
-            padding: 12px 20px; 
-            border-radius: 50px; 
-            background: #06ac06; 
-            color: #fff; 
-            font-weight: 800; 
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
+   padding: 12px 20px; 
+   border-radius: 50px; 
+   background: #06ac06; 
+   color: #fff; 
+   font-weight: 800; 
+   text-decoration: none;
+   transition: all 0.3s ease;
+  }
         
-        .logout:hover{
-            background: #e55a2b;
-            transform: translateY(-2px);
-        }
+.logout:hover{
+  background: #e55a2b;
+  transform: translateY(-2px);     
+ }
 
-        .meta-label{
+.meta-label{
     color: rgba(255,255,255,0.6);
 }
 
@@ -721,26 +721,6 @@ footer::before {
     color: var(--green);
     font-weight: 600;
 }
-
-.lot-product-pricing .price-label{
-    font-size: 0.85rem;
-    color: rgba(255,255,255,0.6);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.lot-product-pricing .price-value{
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--green);
-    margin-right: 8px;
-}
-
-  .lot-product-pricing{
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-  }
 
   .lot-product-controls{
     display: flex;
@@ -871,3 +851,105 @@ footer::before {
     line-height: 1.6;
 }
 
+.product-image {
+          width: 200px;
+          height: 190px;
+          object-fit: cover;
+        }
+
+.lot-product-image{
+    width: 140px;
+    height: 140px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.04);
+}
+
+.lot-product-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.lot-product-info{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.lot-product-title{
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.lot-product-description{
+    color: #c8d2e0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+
+}
+
+.lot-product-meta{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.lot-product-brand{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+
+.lot-product-pricing{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.lot-product-pricing .price-label{
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.lot-product-pricing .price-value{
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--green);
+    margin-right: 8px;
+}
+
+.lot-product-controls{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.lot-product-qty{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+}
+
+.lot-product-qty label{
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}

@@ -10,6 +10,7 @@ import { type ProductCategory } from '../components/apiEndpoints/productCategory
 import ProtectedRoute from '../components/protectedRoute';
 import { tokenUtils } from '../components/apiEndpoints/login/login';
 import { lotStorage } from '../utils/lotStorage';
+import { useRouter } from 'next/router'
 
 // Local Storage Utilities with User-specific storage
 export interface LotItem {
@@ -25,6 +26,8 @@ export interface UserLot {
   createdAt: string;
   updatedAt: string;
 }
+
+  const router = useRouter()
 
 // Header Component (unchanged)
 function Header({ lotCount, onHelpClick }: { lotCount: number; onHelpClick: () => void }) {
@@ -103,6 +106,12 @@ function ProductCard({ product, onAddToLot, categories }: {
     setIsAdding(false);
   };
 
+   const handleProductDetails = async ({product.id}) => {
+    await sessionStorage.setItem("selected id", product.id.toString())
+    router.push('/productDetails');
+  };
+  
+
   // Find the category and parent category for this product
   const productCategory = categories.find(cat => cat.id === product.productCategoryDTO.id);
   const parentCategory = productCategory?.parentId 
@@ -116,8 +125,8 @@ function ProductCard({ product, onAddToLot, categories }: {
       data-subcategory={productCategory?.name || 'Uncategorized'}
     >
       <div className="product-image-placeholder">
-        {productCategory?.imageUrl ? (
-          <img src={productCategory.imageUrl} alt={product.name} className="product-image" />
+        {product?.imageUrls ? (
+          <img src={product.imageUrls[0]} alt={product.name} className="product-image" />
         ) : (
           <div className="product-image-fallback">
             {product.name.charAt(0)}
@@ -162,7 +171,7 @@ function ProductCard({ product, onAddToLot, categories }: {
           >
             {isAdding ? 'Adding...' : 'Add to Lot'}
           </button>
-          <button className="product-btn secondary">
+          <button className="product-btn secondary" onClick={handleProductDetails(product.id)}>
             Details
           </button>
         </div>

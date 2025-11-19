@@ -2,36 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { message } from 'antd';
-import { Product } from '../components/apiEndpoints/products/products';
-import './lot.css';
+import { Product, productApi } from '../components/apiEndpoints/products/products';
+import './productDetails.css'
 import {lotsApi} from '../components/apiEndpoints/lot/lot'
 import ProtectedRoute from '../components/protectedRoute';
 import { lotStorage } from '../utils/lotStorage';
 
-export interface LotItem {
+export interface ProductDetails {
   product: Product;
   quantity: number;
   addedAt: string;
 }
 
-  // Save lot
-  const handleSave = async () => {
-    try {
-      const response = await lotsApi.saveLots();
-      if (response.payload) {
-        console.log(response.payload);
-          } else {
-        message.error("Failed to load product categories");
-      }
-    } catch (error: any) {
-      console.error("Error fetching product categories:", error);
-      message.error(error.message || "Failed to load product categories");
-    } finally {
-    }
-      useEffect(() => {
-    handleSave();
-  }, []);
-  };
 
 // Header Component
 function Header({ lotCount }: { lotCount: number }) {
@@ -147,8 +129,11 @@ function Footer() {
 
 // Main Lot Page Component
 export default function LotPage() {
-  const [lotItems, setLotItems] = useState<LotItem[]>([]);
+  const [lotItems, setLotItems] = useState<ProductDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [LotCount, setLotCount] = useState(0);
+  const [Product, setProduct] = useState<ProductDetails[]>([]);
+
 
   useEffect(() => {
     loadLotItems();
@@ -168,18 +153,50 @@ export default function LotPage() {
     setIsLoading(false);
   };
 
-  const removeFromLot = (productId: number) => {
-    const updatedItems = lotStorage.removeFromLot(productId);
-    setLotItems(updatedItems);
-    message.success('Product removed from lot');
-    window.dispatchEvent(new Event('lotUpdated'));
-  };
-
   const updateQuantity = (productId: number, quantity: number) => {
     const updatedItems = lotStorage.updateQuantity(productId, quantity);
     setLotItems(updatedItems);
     window.dispatchEvent(new Event('lotUpdated'));
   };
+
+    const handleAddToLot = (product: Product) => {
+    try {
+      // Add to localStorage with user ID
+      lotStorage.addToLot(product);
+      
+      // Update count
+      const newCount = lotStorage.getLotCount();
+      setLotCount(newCount);
+      
+      // Show success message
+      message.success(`${product.name} added to lot!`);
+      
+      // Trigger event for other components to listen to
+      window.dispatchEvent(new Event('lotUpdated'));
+    } catch (error) {
+      console.error('Error adding to lot:', error);
+      message.error('Failed to add product to lot');
+    }
+  };
+
+
+    // const fetchProduct = async () => {
+    //   try {
+    //     const response = await productApi.getAllProductById(id: number);
+    //     if (response.payload) {
+    //       setProduct(response.payload);
+    //     } else {
+    //       message.error("Failed to load product");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching product:", error);
+    //     message.error("Error loading product");
+    //   }
+    // };
+  
+    // useEffect(() => {
+    //   fetchProduct();
+    // }, []);
 
   if (isLoading) {
     return (
@@ -195,111 +212,83 @@ export default function LotPage() {
     <div className="lot-page">
       <Header lotCount={lotStorage.getLotCount()} />
       
-       <main className="create-lot-main">
+           <main className="product-details-main">
         <div className="container">
-            <div className="create-lot-header">
-                <h1>Create Your Lot</h1>
-                <p>Review and manage the products you've selected for your auction lot. Adjust quantities as needed before finalizing.</p>
-            </div>
+            <nav className="breadcrumb">
+                <a href="products.html">Products</a>
+                <span className="breadcrumb-separator">/</span>
+                <span className="breadcrumb-current">Product Details</span>
+            </nav>
 
-          {lotItems.length === 0 ? (
-            <div className="lot-empty">
-              <h2>Your lot is empty</h2>
-              <p>Add some products from the products page to get started.</p>
-              <a href="/products" className="btn primary">Browse Products</a>
-            </div>
-          ) : (
-            <>
-              <div className="lot-products-list">
-                {lotItems.map((item) => (
-                  
-                  <div key={item.product.id} className="lot-item">
-
-
-                    <div className="item-image">
-                      <div className="lot-product-image">
-                      <img src={item.product.imageUrls[0]} alt={item.product.name} className="product-image" />
-                      </div>
+            <div className="product-details-container">
+                <div className="product-details-gallery">
+                    <div className="product-main-image">
+                        <img id="mainProductImage" src="https://picsum.photos/seed/silage/800/600" alt="Product main image"/>
                     </div>
-                    
-                    <div className="lot-product-info">
-                        <h3 className="lot-product-title">{item.product.name}</h3>
-                      <p className="lot-product-description">{item.product.description}</p>
-                      <div className="lot-item-meta">
-                         <div className="lot-product-brand">
-                                <span className="meta-label">Brand: </span>
-                                <span className="meta-value">{item.product.brandDTO.name}</span>
+                    <div className="product-thumbnails">
+                        <button className="thumbnail-btn active" data-image="https://picsum.photos/seed/silage/800/600">
+                            <img src="https://picsum.photos/seed/silage/300/200" alt="Product thumbnail 1"/>
+                        </button>
+                        <button className="thumbnail-btn" data-image="https://picsum.photos/seed/silage2/800/600">
+                            <img src="https://picsum.photos/seed/silage2/300/200" alt="Product thumbnail 2"/>
+                        </button>
+                        <button className="thumbnail-btn" data-image="https://picsum.photos/seed/silage3/800/600">
+                            <img src="https://picsum.photos/seed/silage3/300/200" alt="Product thumbnail 3"/>
+                        </button>
+                        <button className="thumbnail-btn" data-image="https://picsum.photos/seed/silage4/800/600">
+                            <img src="https://picsum.photos/seed/silage4/300/200" alt="Product thumbnail 4"/>
+                        </button>
+                    </div>
+                </div>
+
+                <div className="product-details-info">
+                    <div className="product-details-header">
+                        <h1 id="productName">Premium Grass Silage Bales (4x4)</h1>
+                        <div className="product-brand" id="productBrand">Brand: <span>AgriSupply Pro</span></div>
+                    </div>
+
+                    <div className="product-description-section">
+                        <h2>Description</h2>
+                        <p id="productDescription">High-density 2024 second-cut grass silage with 28% dry matter and excellent lactic acid profile. Perfect for dairy cattle feed, ensuring optimal nutrition and palatability. Harvested at peak quality and stored under optimal conditions to maintain freshness and nutritional value.</p>
+                    </div>
+
+                    <div className="product-specs">
+                        <div className="spec-item">
+                            <span className="spec-label">Quantity Available</span>
+                            <span className="spec-value" id="productQty">150 bales</span>
+                        </div>
+                        <div className="spec-item">
+                            <span className="spec-label">Size / Volume</span>
+                            <span className="spec-value" id="productSize">4x4 bales (1.2m x 1.2m x 1.2m)</span>
+                        </div>
+                        <div className="spec-item">
+                            <span className="spec-label">Brand</span>
+                            <span className="spec-value" id="productBrandValue">AgriSupply Pro</span>
+                        </div>
+                    </div>
+
+                    <div className="product-pricing-section">
+                        <h2>Pricing</h2>
+                        <div className="product-pricing-details">
+                            <div className="product-price-block">
+                                <span className="price-label">Min Price</span>
+                                <span className="price-value" id="minPrice">&euro;120</span>
                             </div>
-                         <div className="lot-product-pricing">
-                                <span className="price-label">Min Price: </span>
-                                <span className="price-value">&euro;{item.product.endPrice}</span>
-                                <span className="price-label">Max Price: </span>
-                                <span className="price-value">&euro;{item.product.startPrice}</span>
+                            <div className="product-price-block">
+                                <span className="price-label">Max Price</span>
+                                <span className="price-value" id="maxPrice">&euro;160</span>
+                            </div>
                         </div>
-                      </div>
                     </div>
 
-                    {/* <div className="lot-product-controls">
-                      <label>Quantity:</label>
-                      <div className="quantity-controls">
-
-                        <div className="lot-product-qty">
-                        <label>Quantity:</label>
-                        </div>
-                        <button 
-                          onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                          disabled={item.quantity <= 1}
-                        >
-                          -
-                        </button>
-                        <span>{item.quantity}</span>
-                        <button 
-                          onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div> */}
-
-                      <div className="lot-product-controls">
-                        <div className="lot-product-qty">
-                            <label htmlFor="qty1">Qty</label>
-
-                        <input
-                          type="number"
-                          value={item.quantity}
-                          min="1"
-                          className="qty-input"
-                          onChange={(e) =>
-                            updateQuantity(item.product.id, Number(e.target.value))
-                          }
-                        />
-                        </div>
-                        <button onClick={() => removeFromLot(item.product.id)} className="lot-remove-btn" type="button" aria-label="Remove product">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M18 6L6 18M6 6l12 12"/>
-                            </svg>
-                            Remove
-                        </button>
+                    <div className="product-actions-details">
+                        <button className="product-btn primary add-to-lot-btn" type="button">Add to Lot</button>
+                        <a href="products.html" className="product-btn secondary">Back to Products</a>
                     </div>
-
-                  </div>
-                ))}
-              </div>
-
-              <div className="lot-actions">
-                 <a href="/products" className="product-btn secondary">
-                 Continue Shopping
-                </a>
-                <button onClick={handleSave} className="product-btn primary">
-                   Create Lot 
-                </button>
-               
-              </div>
-            </>
-          )}
+                </div>
+            </div>
         </div>
-      </main>
+    </main>
 
       <Footer />
     </div>

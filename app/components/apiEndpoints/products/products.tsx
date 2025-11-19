@@ -15,6 +15,7 @@ export interface Product {
     startPrice: number;
     endPrice: number;
     status: string;
+    imageUrls: [string];
     brandDTO: {
         id: number;
         name: string;
@@ -74,7 +75,7 @@ export const productApi = {
   // 🧩 GET /product/{id} (get product by ID)
   async getAllProductById(id: number): Promise<ApiResponse<Product>> {
     try {
-      const response = await fetch(`${API_BASE_URL}/public/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/public/products/${id}`, {
         method: 'GET',
         headers: getAuthHeaders(),
       });
